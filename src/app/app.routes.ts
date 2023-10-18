@@ -4,7 +4,7 @@ import { PlaceholderComponent } from './components/placeholder/placeholder.compo
 
 export const appRoutes: Route[] = [
     {
-        path: 'image', component: ImageComponent,
+        path: 'image/:id', component: ImageComponent,
     },{
         path: 'placeholder', component: PlaceholderComponent,
     }

@@ -3,7 +3,8 @@
 <button (click)="OnButtonClick()" >Press me</button>
 
 <nav>
-    <a routerLink="/image" routerLinkActive="active" ariaCurrentWhenActive="page">Image</a>
+    <a [routerLink]="['/image', '6']" routerLinkActive="active" ariaCurrentWhenActive="page">Image 6</a>
+    <a [routerLink]="['/image', '8']" routerLinkActive="active" ariaCurrentWhenActive="page">Image 8</a>
     <a routerLink="/placeholder" routerLinkActive="active" ariaCurrentWhenActive="page">Placeholder</a>
   </nav>
 

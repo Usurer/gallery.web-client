@@ -1,20 +1,36 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ImagesStore } from '../../services/imagesStore';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Observable, map, tap } from 'rxjs';
 
 @Component({
   selector: 'glr-image',
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageComponent {
+export class ImageComponent implements OnInit {
 
-  readonly images$ = this.imagesStore.select(state => state.images);
+constructor(
+  private route: ActivatedRoute,
+  private router: Router,) {
+}
 
-  constructor(
-    private readonly imagesStore: ImagesStore
-  ) { }
+  id$: Observable<string> | null = null;
 
-  OnButtonClick() {
-    this.imagesStore.getImages();
+  query$: Observable<string> | null = null;
+
+  ngOnInit() {
+    this.id$ = this.route.paramMap.pipe(
+      map((params: ParamMap) => {
+        return params.get('id') ?? '';
+      })
+    );
+
+    this.query$ = this.id$?.pipe(
+      map(id => {
+        return `http://localhost:5279/Images/GetImage?id=${id}`;
+      }),
+    );
   }
 }
