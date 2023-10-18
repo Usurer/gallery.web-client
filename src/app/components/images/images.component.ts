@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ImagesStore } from '../../services/imagesStore';
 
 @Component({
-  selector: 'app-images',
+  selector: 'glr-images',
   templateUrl: './images.component.html',
   styleUrls: ['./images.component.scss'],
 })
