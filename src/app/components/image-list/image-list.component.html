@@ -1,3 +1,10 @@
 <p>image-list works!</p>
 
 <button (click)="OnButtonClick()" >Press me</button>
+
+<nav>
+    <a routerLink="/image" routerLinkActive="active" ariaCurrentWhenActive="page">Image</a>
+    <a routerLink="/placeholder" routerLinkActive="active" ariaCurrentWhenActive="page">Placeholder</a>
+  </nav>
+
+<router-outlet></router-outlet>

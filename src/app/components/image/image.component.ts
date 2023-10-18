@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { ImagesStore } from '../../services/imagesStore';
 
 @Component({
-  selector: 'glr-images',
-  templateUrl: './images.component.html',
-  styleUrls: ['./images.component.scss'],
+  selector: 'glr-image',
+  templateUrl: './image.component.html',
+  styleUrls: ['./image.component.scss'],
 })
-export class ImagesComponent {
+export class ImageComponent {
 
   readonly images$ = this.imagesStore.select(state => state.images);
 

@@ -11,6 +11,7 @@ export class ImagesStore extends ComponentStore<ImagesState> {
     constructor() {
         super({ images: []});
     }
+    //http://localhost:5279/Images/GetImage?id=6
 
     readonly getImages = this.effect<void>((trigger$) => {
         return trigger$.pipe(

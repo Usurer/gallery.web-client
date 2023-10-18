@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ImagesComponent } from './images.component';
+import { PlaceholderComponent } from './placeholder.component';
 
-describe('ImagesComponent', () => {
-  let component: ImagesComponent;
-  let fixture: ComponentFixture<ImagesComponent>;
+describe('PlaceholderComponent', () => {
+  let component: PlaceholderComponent;
+  let fixture: ComponentFixture<PlaceholderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ImagesComponent],
+      declarations: [PlaceholderComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ImagesComponent);
+    fixture = TestBed.createComponent(PlaceholderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
