@@ -4,6 +4,8 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
+import { Observable, tap } from 'rxjs';
+import { ItemInfo } from '../../dto/item-info';
 
 @Component({
   selector: 'glr-image-list',
@@ -13,13 +15,15 @@ import { ImageListStore } from '../../services/image-list.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageListComponent {
-  readonly images$ = this.imagesStore.select(state => state.images);
+  readonly images$: Observable<ItemInfo[]> = this.imagesStore
+    .select(state => state.images)
+    .pipe(tap(x => console.log(x)));
 
   constructor(
     private readonly imagesStore: ImageListStore
   ) { }
 
   OnButtonClick() {
-    this.imagesStore.getImages();
+    this.imagesStore.getImages(10);
   }
 }

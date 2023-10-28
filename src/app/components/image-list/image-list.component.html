@@ -2,6 +2,21 @@
 
 <button (click)="OnButtonClick()" >Press me</button>
 
+<div *ngIf="images$ | async as images">
+  <div>
+    <div *ngFor="let image of images">
+      <ng-container *ngIf="image.isFolder; else imgTemplate">
+        {{image.name}}
+      </ng-container>
+      <ng-template #imgTemplate>
+        <a [routerLink]="['/image', image.id]">
+          <img src="{{'http://localhost:5279/Images/GetImagePreview?width=100&id=' + image.id}}"/>
+        </a>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
 <nav>
     <a [routerLink]="['/image', '6']" routerLinkActive="active" ariaCurrentWhenActive="page">Image 6</a>
     <a [routerLink]="['/image', '8']" routerLinkActive="active" ariaCurrentWhenActive="page">Image 8</a>
