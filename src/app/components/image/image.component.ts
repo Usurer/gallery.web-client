@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ImagesStore } from '../../services/images.store';
+import { ImageListStore } from '../../services/image-list.store';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
 

@@ -11,7 +11,7 @@ export interface ImagesState {
 @Injectable({
     providedIn: ServicesModule
 })
-export class ImagesStore extends ComponentStore<ImagesState> {
+export class ImageListStore extends ComponentStore<ImagesState> {
     
     constructor() {
         super({ images: []});

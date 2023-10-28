@@ -3,7 +3,7 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
-import { ImagesStore } from '../../services/images.store';
+import { ImageListStore } from '../../services/image-list.store';
 
 @Component({
   selector: 'glr-image-list',
@@ -16,7 +16,7 @@ export class ImageListComponent {
   readonly images$ = this.imagesStore.select(state => state.images);
 
   constructor(
-    private readonly imagesStore: ImagesStore
+    private readonly imagesStore: ImageListStore
   ) { }
 
   OnButtonClick() {
