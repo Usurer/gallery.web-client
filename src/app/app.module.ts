@@ -7,16 +7,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ImageModule } from './components/image/image.module';
 
 @NgModule({
   declarations: [
-    ImageComponent, 
     PlaceholderComponent, 
     AppComponent
   ],
   imports: [
     CommonModule,
     BrowserModule, 
+    ImageModule,
     ImageListModule, 
     AppRoutingModule
   ],
