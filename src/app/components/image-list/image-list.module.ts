@@ -4,6 +4,7 @@ import { ServicesModule } from '../../services/services.module';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { ImageListRoutingModule } from './image-list.routing.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     BrowserModule,
     ServicesModule, 
-    RouterModule
+    RouterModule,
+    ImageListRoutingModule
   ]
 })
 export class ImageListModule {}
