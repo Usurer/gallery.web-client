@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
-import { ImagesStore } from './imagesStore';
 
 @NgModule({
-  providers: [ImagesStore],
+  providers: [],
 })
 export class ServicesModule {}

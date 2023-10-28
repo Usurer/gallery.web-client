@@ -1,11 +1,16 @@
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { fromFetch } from 'rxjs/fetch';
 import { switchMap, of, catchError } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { ServicesModule } from "./services.module";
 
 export interface ImagesState {
     images: []
 }
 
+@Injectable({
+    providedIn: ServicesModule
+})
 export class ImagesStore extends ComponentStore<ImagesState> {
     
     constructor() {

@@ -3,7 +3,7 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
-import { ImagesStore } from '../../services/imagesStore';
+import { ImagesStore } from '../../services/images.store';
 
 @Component({
   selector: 'glr-image-list',
