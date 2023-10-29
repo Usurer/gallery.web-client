@@ -21,7 +21,7 @@ export class ImageListStore extends ComponentStore<ImagesState> {
     readonly getImages = this.effect((itemsCount$: Observable<number>) => {
         return itemsCount$.pipe(
             switchMap((itemsCount) => {
-                return fromFetch(`http://localhost:5279/Images/ListItems?take=${itemsCount ?? 10}`).pipe(
+                return fromFetch(`http://localhost:5279/Images/ListItems?parentId=16&take=${itemsCount ?? 10}`).pipe(
                     tapResponse(
                         // TODO: Can we do it in a better way pls?
                         (imageList) => imageList.json().then((x: ItemInfo[]) => this.addItems(x) ),
