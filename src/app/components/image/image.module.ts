@@ -12,6 +12,9 @@ import { ImageComponent } from './image.component';
     CommonModule,
     BrowserModule,
     RouterModule,
+  ],
+  exports: [
+    ImageComponent
   ]
 })
 export class ImageModule {}

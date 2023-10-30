@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { ImageListRoutingModule } from './image-list.routing.module';
+import { ImagePopupModule } from '../image-popup/image-popup.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { ImageListRoutingModule } from './image-list.routing.module';
     CommonModule,
     BrowserModule,
     RouterModule,
+    ImagePopupModule,
     ImageListRoutingModule
   ]
 })

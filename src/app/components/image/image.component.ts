@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
@@ -9,28 +9,23 @@ import { Observable, map, tap } from 'rxjs';
   styleUrls: ['./image.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageComponent implements OnInit {
+export class ImageComponent {
 
 constructor(
   private route: ActivatedRoute,
   private router: Router,) {
 }
+  private _id!: string; // TODO: Should it be nullable?
+  public query: string | undefined;
 
-  id$: Observable<string> | null = null;
-
-  query$: Observable<string> | null = null;
-
-  ngOnInit() {
-    this.id$ = this.route.paramMap.pipe(
-      map((params: ParamMap) => {
-        return params.get('id') ?? '';
-      })
-    );
-
-    this.query$ = this.id$?.pipe(
-      map(id => {
-        return `http://localhost:5279/Images/GetImage?id=${id}`;
-      }),
-    );
+  @Input()
+  get id(): string | undefined {
+    return this._id;
   }
+
+  set id(value: string) {
+    this._id = value;
+    this.query = `http://localhost:5279/Images/GetImage?id=${value}`;
+  }
+
 }

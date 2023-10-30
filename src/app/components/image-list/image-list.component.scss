@@ -1,41 +1,8 @@
-/* Reset some default styles */
-// * {
-//     margin: 0;
-//     padding: 0;
-//     box-sizing: border-box;
-// }
-
-/* Style the photo gallery container */
-// .gallery {
-//     display: flex;
-//     flex-wrap: wrap;
-// }
-
-// /* Style the individual photo containers */
-// .item {
-//     height: 40vh;
-//     margin: 5px;
-//     flex-grow: 1;
-//     background-color: #ccc;
-// }
-
-// /* Style the links inside the photos */
-// .item a {
-//     display: flex;
-//     width: 100%;
-//     height: 100%;
-// }
-
-// /* Style the images inside the links */
-// .item a img {
-//     max-width: 100%;
-//     max-height: 100%;
-//     object-fit: cover; /* Maintain aspect ratio while covering the container */
-//     // vertical-align: bottom;
-// }
-
 :host {
-    background-color: red;
+    background-color: rgba($color: #ff0000, $alpha: 0.5);
+    display: block;
+    height: 90vh;
+    overflow: scroll;
 }
 
 ul {
@@ -60,8 +27,8 @@ img {
     vertical-align: bottom;
 }
 
-.outlet {
-    position: absolute;
+glr-image-popup {
+    position: fixed;
     top: 0;
     left: 0;
 
@@ -70,7 +37,8 @@ img {
     height: 100%;
     background-color: rgba($color: #ededed, $alpha: 0.5);
 
-    &:empty {
-        display: none;
-    }
+    // &:empty {
+    //     display: none;
+    // }
 }
+
