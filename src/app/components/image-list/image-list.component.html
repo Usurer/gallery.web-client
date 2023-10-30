@@ -10,7 +10,7 @@
       </ng-container>
       <ng-template #imgTemplate>
         <a [routerLink]="['./', image.id]">
-          <img src="{{'http://localhost:5279/Images/GetImagePreview?width=600&id=' + image.id}}"/>
+          <img src="{{'http://localhost:5279/Images/GetImagePreview?height=600&id=' + image.id}}"/>
         </a>
       </ng-template>
     </li>
