@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ImageComponent } from './image.component';
+import { RouterModule } from '@angular/router';
 
 describe('ImageComponent', () => {
   let component: ImageComponent;
@@ -8,6 +9,7 @@ describe('ImageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ImageComponent],
+      imports: [RouterModule.forRoot([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ImageComponent);

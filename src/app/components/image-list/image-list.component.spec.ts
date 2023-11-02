@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ImageListComponent } from './image-list.component';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 describe('ImageListComponent', () => {
   let component: ImageListComponent;
@@ -8,6 +10,7 @@ describe('ImageListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ImageListComponent],
+      imports: [CommonModule, RouterModule.forRoot([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ImageListComponent);
