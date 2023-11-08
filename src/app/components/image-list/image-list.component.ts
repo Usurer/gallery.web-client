@@ -1,11 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   OnInit,
+  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
-import { Observable, filter, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, map, tap } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
 import { Router, RouterEvent } from '@angular/router';
 
@@ -17,6 +19,11 @@ import { Router, RouterEvent } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageListComponent implements OnInit {
+
+  take$ = new BehaviorSubject<number>(10);
+
+  @ViewChild('takeInput') takeinput: ElementRef<HTMLInputElement> | undefined;
+
   readonly images$: Observable<ItemInfo[]> = this.imagesStore
     .select(state => state.images)
     .pipe(
@@ -26,7 +33,7 @@ export class ImageListComponent implements OnInit {
 
   constructor(
     private readonly imagesStore: ImageListStore,
-    private readonly router: Router
+    private readonly router: Router,    
   ) {
     router.events.pipe(
       filter(e => e instanceof RouterEvent)
@@ -38,6 +45,19 @@ export class ImageListComponent implements OnInit {
   }
 
   OnButtonClick() {
-    this.imagesStore.getImages(10);
+    this.imagesStore.getImages(this.take$ ?? 10);
+  }
+
+  onTakeBlur(value: string): void {
+    const val = parseInt(value);
+    if (!Number.isNaN(val))
+    {
+      this.take$.next(val);
+    } else {
+      if (this.takeinput) {
+        this.takeinput.nativeElement.value = this.take$.value + '';
+      }
+    }
+    
   }
 }

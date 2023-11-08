@@ -16,7 +16,10 @@
   </ul>
 </ng-container>
 
-<button (click)="OnButtonClick()" >Press me</button>
+<section>
+  <input #takeInput type="number" [value]="take$ | async" (blur)="onTakeBlur(takeInput.value)" min="1" max="1000" />
+  <button (click)="OnButtonClick()" >Press me</button>
+</section>
 
 <nav>
     <a [routerLink]="['/image', '6']" routerLinkActive="active" ariaCurrentWhenActive="page">Image 6</a>
