@@ -21,7 +21,7 @@ export class ImageListComponent implements OnInit {
     .select(state => state.images)
     .pipe(
       tap(x => console.log(x)),
-      map(x => x.filter(k => k.name.endsWith('jpg') || k.name.endsWith('jpeg')))
+      map(x => x.filter(k => k.name.toLowerCase().endsWith('jpg') || k.name.toLowerCase().endsWith('jpeg')))
     );
 
   constructor(
@@ -38,6 +38,6 @@ export class ImageListComponent implements OnInit {
   }
 
   OnButtonClick() {
-    this.imagesStore.getImages(50);
+    this.imagesStore.getImages(10);
   }
 }

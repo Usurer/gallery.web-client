@@ -1,7 +1,5 @@
 <p>image-list works!</p>
 
-<button (click)="OnButtonClick()" >Press me</button>
-
 <ng-container *ngIf="images$ | async as images">
   <ul class="gallery">
     <li *ngFor="let image of images" class="item">
@@ -17,6 +15,8 @@
     <li></li>
   </ul>
 </ng-container>
+
+<button (click)="OnButtonClick()" >Press me</button>
 
 <nav>
     <a [routerLink]="['/image', '6']" routerLinkActive="active" ariaCurrentWhenActive="page">Image 6</a>
