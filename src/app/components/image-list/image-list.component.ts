@@ -2,14 +2,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
-import { BehaviorSubject, Observable, Subject, filter, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, filter, map, tap } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
 import { Router, RouterEvent } from '@angular/router';
+import { ClickNotificationService } from '../../services/click-notification.service';
 
 @Component({
   selector: 'glr-image-list',
@@ -17,8 +19,11 @@ import { Router, RouterEvent } from '@angular/router';
   styleUrls: ['./image-list.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ClickNotificationService]
 })
-export class ImageListComponent implements OnInit {
+export class ImageListComponent implements OnInit, OnDestroy {
+
+  overlayClickSubscription: Subscription | undefined;
 
   take$ = new BehaviorSubject<number>(10);
 
@@ -33,11 +38,19 @@ export class ImageListComponent implements OnInit {
 
   constructor(
     private readonly imagesStore: ImageListStore,
-    private readonly router: Router,    
+    private readonly router: Router,
+    private clickNotification: ClickNotificationService
   ) {
     router.events.pipe(
       filter(e => e instanceof RouterEvent)
     );
+    
+    this.overlayClickSubscription = clickNotification.clicks.subscribe({
+      next: (value) => this.router.navigate(['../'])
+    });
+  }
+  ngOnDestroy(): void {
+    this.overlayClickSubscription?.unsubscribe();
   }
 
   ngOnInit(): void {
