@@ -41,11 +41,15 @@ export class ImageListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.imagesStore.getImages(20);
+    this.imagesStore.getImages(1);
   }
 
-  OnButtonClick() {
+  onTakePageClick() {
     this.imagesStore.getImages(this.take$ ?? 10);
+  }
+
+  onRepeatClick() {
+    this.imagesStore.repeatGetImages(this.take$ ?? 10);
   }
 
   onTakeBlur(value: string): void {

@@ -18,7 +18,8 @@
 
 <section>
   <input #takeInput type="number" [value]="take$ | async" (blur)="onTakeBlur(takeInput.value)" min="1" max="1000" />
-  <button (click)="OnButtonClick()" >Press me</button>
+  <button (click)="onTakePageClick()">Load {{take$ | async}} images</button>
+  <button (click)="onRepeatClick()">Repeat latest</button>
 </section>
 
 <nav>
