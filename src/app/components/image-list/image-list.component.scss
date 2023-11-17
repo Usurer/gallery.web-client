@@ -42,3 +42,14 @@ glr-image-popup {
     // }
 }
 
+.rows-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    width: 500px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}

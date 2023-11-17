@@ -12,6 +12,7 @@ import { BehaviorSubject, Observable, Subscription, filter, map, tap } from 'rxj
 import { ItemInfo } from '../../dto/item-info';
 import { Router, RouterEvent } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
+import { GalleryLayoutService } from '../../services/gallery-layout.service';
 
 @Component({
   selector: 'glr-image-list',
@@ -33,13 +34,19 @@ export class ImageListComponent implements OnInit, OnDestroy {
     .select(state => state.images)
     .pipe(
       tap(x => console.log(x)),
-      map(x => x.filter(k => k.name.toLowerCase().endsWith('jpg') || k.name.toLowerCase().endsWith('jpeg')))
+      map(x => x.filter(k => k.name.toLowerCase().endsWith('jpg') || k.name.toLowerCase().endsWith('jpeg')))      
     );
+
+  readonly rows$: Observable<ItemInfo[][]> = this.images$.pipe(
+    filter(x => x.length > 0),
+    map(x => this.galleryLayout.defineRows(x, 500))
+  );
 
   constructor(
     private readonly imagesStore: ImageListStore,
     private readonly router: Router,
-    private clickNotification: ClickNotificationService
+    private clickNotification: ClickNotificationService,
+    private galleryLayout: GalleryLayoutService
   ) {
     router.events.pipe(
       filter(e => e instanceof RouterEvent)
@@ -53,8 +60,9 @@ export class ImageListComponent implements OnInit, OnDestroy {
     this.overlayClickSubscription?.unsubscribe();
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
-    this.imagesStore.getImages(1);
+    // this.imagesStore.getImages(1);
   }
 
   onTakePageClick() {
@@ -62,7 +70,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   onRepeatClick() {
-    this.imagesStore.repeatGetImages(this.take$ ?? 10);
+    //this.imagesStore.repeatGetImages(this.take$ ?? 10);
   }
 
   onTakeBlur(value: string): void {

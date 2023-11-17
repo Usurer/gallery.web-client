@@ -1,6 +1,6 @@
 <p>image-list works!</p>
 
-<ng-container *ngIf="images$ | async as images">
+<!-- <ng-container *ngIf="images$ | async as images">
   <ul class="gallery">
     <li *ngFor="let image of images" class="item">
       <ng-container *ngIf="image.isFolder; else imgTemplate">
@@ -14,6 +14,16 @@
     </li>
     <li></li>
   </ul>
+</ng-container> -->
+
+<ng-container *ngIf="rows$ | async as rows">
+  <div class="rows-wrapper">
+    <div *ngFor="let row of rows" class="row">
+      <div *ngFor="let image of row" class="img-wrapper">
+        <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" [width]="image.width" [height]="image.height" alt="">
+      </div>
+    </div>
+  </div>
 </ng-container>
 
 <section>
