@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -37,6 +38,13 @@ export class ImageListComponent implements OnInit, OnDestroy {
   @ViewChild("rowsWrapper")
   rowsWrapper: ElementRef | undefined;
 
+  @HostListener('window:resize', ['$event'])
+  resized(e: any): void {
+    // console.log(e);
+    const w = this.rowsWrapper?.nativeElement.clientWidth;
+    this.resizeSubject$.next(w);
+  }
+
   readonly images$: Observable<ItemInfo[]> = this.imagesStore
     .select(state => state.images)
     .pipe(
@@ -53,7 +61,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
     distinctUntilChanged(),
     tap(x => console.log(`distict to ${x}`)),
     mergeMap(size => this.rowsSource$.pipe(      
-      tap(() => setTimeout(() => this.cd.detectChanges(), 1)),
+      // tap(() => setTimeout(() => this.cd.detectChanges(), 1)),
       map((rows) => this.galleryLayout.defineRows(rows, size)),
     ))
   );
@@ -81,22 +89,22 @@ export class ImageListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // this.imagesStore.getImages(1);
 
-    this.rows$.pipe(
-      filter(x => x.length > 0),
-      first()      
-    ).subscribe({
-      next: () => {
-        setTimeout(() => {
-          const wrapperEl = this.rowsWrapper?.nativeElement;
-          const obs = new ResizeObserver(el => {
-            const width = el[0]?.target?.clientWidth;
-            this.resizeSubject$.next(width);
-            // console.log('resized');
-          });
-          obs.observe(wrapperEl);
-        }, 10);
-      }
-    });
+    // this.rows$.pipe(
+    //   filter(x => x.length > 0),
+    //   first()      
+    // ).subscribe({
+    //   next: () => {
+    //     setTimeout(() => {
+    //       const wrapperEl = this.rowsWrapper?.nativeElement;
+    //       const obs = new ResizeObserver(el => {
+    //         const width = el[0]?.target?.clientWidth;
+    //         this.resizeSubject$.next(width);
+    //         // console.log('resized');
+    //       });
+    //       obs.observe(wrapperEl);
+    //     }, 10);
+    //   }
+    // });
   }
 
   onTakePageClick() {
