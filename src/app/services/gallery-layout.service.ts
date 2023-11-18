@@ -11,6 +11,8 @@ export type Row = ItemInfo[];
 export class GalleryLayoutService {
     
     public defineRows(images: ItemInfo[], containerWidth: number): Row[] {
+        performance.mark('define-rows-start');
+        
         const rows: Row[] = [];
 
         let buffer: ItemInfo[] = [];
@@ -56,6 +58,10 @@ export class GalleryLayoutService {
                 }
             }
         }
+
+        performance.mark('define-rows-end');
+        const perf = performance.measure('my-measure', 'define-rows-start', 'define-rows-end');
+        // console.log(perf.duration);
 
         return rows;
 

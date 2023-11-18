@@ -22,7 +22,7 @@ export class ImageListStore extends ComponentStore<ImagesState> {
         return take$.pipe(
             withLatestFrom(this.select(state => state.images)),
             switchMap(([take, images]) => {
-                return fromFetch(`http://localhost:5279/Images/ListItems?take=${take ?? 10}&skip=${images.length ?? 0}`, {
+                return fromFetch(`http://localhost:5279/Images/ListItems?parentId=${118}&take=${take ?? 10}&skip=${images.length ?? 0}`, {
                     cache: "force-cache"
                 }).pipe(
                     tapResponse(
@@ -43,7 +43,7 @@ export class ImageListStore extends ComponentStore<ImagesState> {
         return take$.pipe(
             withLatestFrom(this.select(state => state.images)),
             switchMap(([take, images]) => {
-                return fromFetch(`http://localhost:5279/Images/ListItems?take=${1}&skip=${0}`, {
+                return fromFetch(`http://localhost:5279/Images/ListItems?parentId=${118}&take=${1}&skip=${0}`, {
                     cache: "default"
                 }).pipe(
                     tapResponse(

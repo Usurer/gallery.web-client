@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
@@ -8,7 +9,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
-import { BehaviorSubject, Observable, Subscription, filter, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, combineLatest, distinct, distinctUntilChanged, filter, first, map, mergeMap, tap } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
 import { Router, RouterEvent } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
@@ -26,27 +27,43 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   overlayClickSubscription: Subscription | undefined;
 
-  take$ = new BehaviorSubject<number>(10);
+  take$ = new BehaviorSubject<number>(2);
 
-  @ViewChild('takeInput') takeinput: ElementRef<HTMLInputElement> | undefined;
+  resizeSubject$ = new BehaviorSubject<number>(500);
+
+  @ViewChild('takeInput')
+  takeinput: ElementRef<HTMLInputElement> | undefined;
+
+  @ViewChild("rowsWrapper")
+  rowsWrapper: ElementRef | undefined;
 
   readonly images$: Observable<ItemInfo[]> = this.imagesStore
     .select(state => state.images)
     .pipe(
-      tap(x => console.log(x)),
+      // tap(x => console.log(x)),
       map(x => x.filter(k => k.name.toLowerCase().endsWith('jpg') || k.name.toLowerCase().endsWith('jpeg')))      
     );
 
-  readonly rows$: Observable<ItemInfo[][]> = this.images$.pipe(
-    filter(x => x.length > 0),
-    map(x => this.galleryLayout.defineRows(x, 500))
+  readonly rowsSource$ = this.images$.pipe(
+    filter(x => x.length > 0)
+  );
+
+  readonly rows$: Observable<ItemInfo[][]> =  this.resizeSubject$.pipe(
+    // tap(x => console.log(`resized to ${x}`)),
+    distinctUntilChanged(),
+    tap(x => console.log(`distict to ${x}`)),
+    mergeMap(size => this.rowsSource$.pipe(      
+      tap(() => setTimeout(() => this.cd.detectChanges(), 1)),
+      map((rows) => this.galleryLayout.defineRows(rows, size)),
+    ))
   );
 
   constructor(
     private readonly imagesStore: ImageListStore,
     private readonly router: Router,
     private clickNotification: ClickNotificationService,
-    private galleryLayout: GalleryLayoutService
+    private galleryLayout: GalleryLayoutService,
+    private cd: ChangeDetectorRef
   ) {
     router.events.pipe(
       filter(e => e instanceof RouterEvent)
@@ -63,6 +80,23 @@ export class ImageListComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
     // this.imagesStore.getImages(1);
+
+    this.rows$.pipe(
+      filter(x => x.length > 0),
+      first()      
+    ).subscribe({
+      next: () => {
+        setTimeout(() => {
+          const wrapperEl = this.rowsWrapper?.nativeElement;
+          const obs = new ResizeObserver(el => {
+            const width = el[0]?.target?.clientWidth;
+            this.resizeSubject$.next(width);
+            // console.log('resized');
+          });
+          obs.observe(wrapperEl);
+        }, 10);
+      }
+    });
   }
 
   onTakePageClick() {
@@ -84,5 +118,17 @@ export class ImageListComponent implements OnInit, OnDestroy {
       }
     }
     
+  }
+
+  onResizeClick(): void {
+    if (this.resizeSubject$.value < 500) {
+      this.resizeSubject$.next(500);
+    } else {
+      this.resizeSubject$.next(300);
+    }
+  }
+
+  trackByImgId(idx: number, item: ItemInfo): string {
+    return ' ' + item.id + item.width!;
   }
 }

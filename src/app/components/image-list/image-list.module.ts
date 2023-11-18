@@ -5,10 +5,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { ImageListRoutingModule } from './image-list.routing.module';
 import { ImagePopupModule } from '../image-popup/image-popup.module';
+import { ImageListDumbComponent } from './image-list-dumb.component';
 
 @NgModule({
   declarations: [
     ImageListComponent,
+    ImageListDumbComponent
   ],
   imports: [
     CommonModule,
