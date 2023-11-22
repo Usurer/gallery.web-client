@@ -10,6 +10,7 @@ import {
   QueryList,
   ViewChild,
   ViewChildren,
+  ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
@@ -62,6 +63,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
     private zone: NgZone,
     private readonly router: Router,
     private clickNotification: ClickNotificationService,
+    private viewContainerRef: ViewContainerRef
   ) {
     this.overlayClickSubscription = clickNotification.clicks.subscribe({
       next: (value) => this.router.navigate(['../'])
@@ -80,11 +82,11 @@ export class ImageListComponent implements OnInit, OnDestroy {
       next: () => {
         this.rowsWrapper?.changes.pipe(
           tap(() => {
-            const wrapperEl = this.rowsWrapper?.first.nativeElement
+            const wrapperEl = this.viewContainerRef.element.nativeElement;
             const resizeObserver = new ResizeObserver(el => {
               this.zone.run(() => {
-                const width = el[0]?.target?.getBoundingClientRect().width;
-                this.resizeSubject$.next(width);
+                const width = wrapperEl.clientWidth ?? wrapperEl.getBoundingClientRect().width;
+                this.resizeSubject$.next(width - 15);
               });
             });
             resizeObserver.observe(wrapperEl);

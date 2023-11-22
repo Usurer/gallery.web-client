@@ -3,7 +3,7 @@
     <div *ngFor="let row of rows" class="row">
       <div *ngFor="let image of row" class="img-wrapper"  [style.width.px]="image.width" [style.height.px]="image.height">
         <a [routerLink]="['./', image.id]">
-          <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" [width]="image.width" [height]="image.height" alt="">
+          <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" alt="">
         </a>
       </div>
     </div>
