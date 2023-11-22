@@ -4,7 +4,6 @@ import {
   Input,
   ViewEncapsulation,
 } from '@angular/core';
-import { Observable } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
 import { ClickNotificationService } from '../../services/click-notification.service';
 
@@ -19,6 +18,5 @@ import { ClickNotificationService } from '../../services/click-notification.serv
 export class ImageListDumbComponent{
 
   @Input()
-  rows$: Observable<ItemInfo[][]> | undefined;
-
+  rows: ItemInfo[][] = [];
 }

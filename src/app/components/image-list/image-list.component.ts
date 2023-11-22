@@ -4,13 +4,16 @@ import {
   Component,
   ElementRef,
   HostListener,
+  NgZone,
   OnDestroy,
   OnInit,
+  QueryList,
   ViewChild,
+  ViewChildren,
   ViewEncapsulation,
 } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
-import { BehaviorSubject, Observable, Subject, Subscription, combineLatest, distinct, distinctUntilChanged, filter, first, map, mergeMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, combineLatest, debounce, debounceTime, distinct, distinctUntilChanged, filter, first, map, mergeMap, switchMap, tap } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
 import { Router, RouterEvent } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
@@ -28,83 +31,67 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   overlayClickSubscription: Subscription | undefined;
 
-  take$ = new BehaviorSubject<number>(2);
+  take$ = new BehaviorSubject<number>(990);
 
   resizeSubject$ = new BehaviorSubject<number>(500);
 
   @ViewChild('takeInput')
   takeinput: ElementRef<HTMLInputElement> | undefined;
 
-  @ViewChild("rowsWrapper")
-  rowsWrapper: ElementRef | undefined;
-
-  @HostListener('window:resize', ['$event'])
-  resized(e: any): void {
-    // console.log(e);
-    const w = this.rowsWrapper?.nativeElement.clientWidth;
-    this.resizeSubject$.next(w);
-  }
+  @ViewChildren("rowsWrapper")
+  rowsWrapper: QueryList<ElementRef> | undefined;
 
   readonly images$: Observable<ItemInfo[]> = this.imagesStore
     .select(state => state.images)
     .pipe(
-      // tap(x => console.log(x)),
-      map(x => x.filter(k => k.name.toLowerCase().endsWith('jpg') || k.name.toLowerCase().endsWith('jpeg')))      
+      map(x => x.filter(k => k.name.toLowerCase().endsWith('jpg') || k.name.toLowerCase().endsWith('jpeg'))),
+      filter(x => x.length > 0)
     );
 
-  readonly rowsSource$ = this.images$.pipe(
-    filter(x => x.length > 0)
-  );
-
-  readonly rows$: Observable<ItemInfo[][]> =  this.resizeSubject$.pipe(
-    // tap(x => console.log(`resized to ${x}`)),
+  readonly rows$: Observable<ItemInfo[][]> = this.resizeSubject$.pipe(
+    debounceTime(100),
     distinctUntilChanged(),
-    tap(x => console.log(`distict to ${x}`)),
-    mergeMap(size => this.rowsSource$.pipe(      
-      // tap(() => setTimeout(() => this.cd.detectChanges(), 1)),
-      map((rows) => this.galleryLayout.defineRows(rows, size)),
-    ))
+    switchMap(size => this.images$.pipe(    
+      map((images) => this.galleryLayout.defineRows(images, size)),
+    )),
   );
 
   constructor(
     private readonly imagesStore: ImageListStore,
+    private galleryLayout: GalleryLayoutService,
+    private zone: NgZone,
     private readonly router: Router,
     private clickNotification: ClickNotificationService,
-    private galleryLayout: GalleryLayoutService,
-    private cd: ChangeDetectorRef
   ) {
-    router.events.pipe(
-      filter(e => e instanceof RouterEvent)
-    );
-    
     this.overlayClickSubscription = clickNotification.clicks.subscribe({
       next: (value) => this.router.navigate(['../'])
     });
   }
+
   ngOnDestroy(): void {
     this.overlayClickSubscription?.unsubscribe();
   }
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
-    // this.imagesStore.getImages(1);
-
-    // this.rows$.pipe(
-    //   filter(x => x.length > 0),
-    //   first()      
-    // ).subscribe({
-    //   next: () => {
-    //     setTimeout(() => {
-    //       const wrapperEl = this.rowsWrapper?.nativeElement;
-    //       const obs = new ResizeObserver(el => {
-    //         const width = el[0]?.target?.clientWidth;
-    //         this.resizeSubject$.next(width);
-    //         // console.log('resized');
-    //       });
-    //       obs.observe(wrapperEl);
-    //     }, 10);
-    //   }
-    // });
+    this.rows$.pipe(
+      filter(x => x.length > 0),
+      first(),
+    ).subscribe({
+      next: () => {
+        this.rowsWrapper?.changes.pipe(
+          tap(() => {
+            const wrapperEl = this.rowsWrapper?.first.nativeElement
+            const resizeObserver = new ResizeObserver(el => {
+              this.zone.run(() => {
+                const width = el[0]?.target?.getBoundingClientRect().width;
+                this.resizeSubject$.next(width);
+              });
+            });
+            resizeObserver.observe(wrapperEl);
+          })
+        ).subscribe(); 
+      }
+    });
   }
 
   onTakePageClick() {
@@ -112,7 +99,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   onRepeatClick() {
-    //this.imagesStore.repeatGetImages(this.take$ ?? 10);
+    this.imagesStore.repeatGetImages(this.take$ ?? 10);
   }
 
   onTakeBlur(value: string): void {
@@ -126,17 +113,5 @@ export class ImageListComponent implements OnInit, OnDestroy {
       }
     }
     
-  }
-
-  onResizeClick(): void {
-    if (this.resizeSubject$.value < 500) {
-      this.resizeSubject$.next(500);
-    } else {
-      this.resizeSubject$.next(300);
-    }
-  }
-
-  trackByImgId(idx: number, item: ItemInfo): string {
-    return ' ' + item.id + item.width!;
   }
 }

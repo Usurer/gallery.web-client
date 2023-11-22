@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
@@ -7,7 +7,8 @@ import { Observable, map, tap } from 'rxjs';
   selector: 'glr-image',
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class ImageComponent {
 

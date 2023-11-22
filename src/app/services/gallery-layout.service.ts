@@ -61,7 +61,7 @@ export class GalleryLayoutService {
 
         performance.mark('define-rows-end');
         const perf = performance.measure('my-measure', 'define-rows-start', 'define-rows-end');
-        // console.log(perf.duration);
+        console.log(perf.duration);
 
         return rows;
 

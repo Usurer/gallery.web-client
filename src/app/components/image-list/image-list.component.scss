@@ -1,5 +1,5 @@
 :host {
-    background-color: rgba($color: #ff0000, $alpha: 0.5);
+    background-color: rgba($color: #eaeaea, $alpha: 0.5);
     display: block;
     height: 90vh;
     overflow: scroll;
@@ -35,7 +35,7 @@ glr-image-popup {
     z-index: 100;
     width: 100%;
     height: 100%;
-    background-color: rgba($color: #ededed, $alpha: 0.5);
+    background-color: rgba($color: #000000, $alpha: 0.9);
 
     // &:empty {
     //     display: none;
@@ -46,22 +46,26 @@ glr-image-popup {
     display: flex;
     flex-direction: column;
 
-    width: 500px;
+    width: 100%;
 }
 
 @media (max-width: 1900px) {
     .rows-wrapper {
-        width: 500px;
+        // width: 500px;
     }
 }
 
 @media (max-width: 1000px) {
     .rows-wrapper {
-        width: 300px;
+        // width: 300px;
     }
 }
 
 .row {
     display: flex;
     flex-direction: row;
+}
+
+.img-wrapper {
+    margin: 2px;
 }

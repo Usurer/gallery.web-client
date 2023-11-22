@@ -1,10 +1,7 @@
-<div *ngIf="rows$ | async as rows">
-  <div class="rows-wrapper">
-    <div *ngFor="let row of rows" class="row">
-      <div *ngFor="let image of row" class="img-wrapper">
-        {{image.width}}
-        <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" [width]="image.width" [height]="image.height" alt="">
-      </div>
+<div class="rows-wrapper">
+  <div *ngFor="let row of rows" class="row">
+    <div *ngFor="let image of row" class="img-wrapper">
+      <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" [width]="image.width" [height]="image.height" alt="">
     </div>
   </div>
 </div>

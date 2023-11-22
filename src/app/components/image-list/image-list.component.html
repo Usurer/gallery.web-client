@@ -1,49 +1,14 @@
-<p>image-list works!</p>
-<button (click)="onResizeClick()">Change wrapper size</button>
-
-<!-- <ng-container *ngIf="images$ | async as images">
-  <ul class="gallery">
-    <li *ngFor="let image of images" class="item">
-      <ng-container *ngIf="image.isFolder; else imgTemplate">
-        {{image.name}}
-      </ng-container>
-      <ng-template #imgTemplate>
-        <a [routerLink]="['./', image.id]">
-          <img src="{{'http://localhost:5279/Images/GetImagePreview?height=600&id=' + image.id}}"/>
-        </a>
-      </ng-template>
-    </li>
-    <li></li>
-  </ul>
-</ng-container> -->
-
-<div #rowsWrapper class="rows-wrapper"></div>
-<glr-image-list-dumb [rows$]="rows$">
-
-
-</glr-image-list-dumb>
-<!-- <ng-container *ngIf="rows$ | async as rows">
+<ng-container *ngIf="rows$ | async as rows">
   <div #rowsWrapper class="rows-wrapper">
     <div *ngFor="let row of rows" class="row">
-      <div *ngFor="let image of row" class="img-wrapper">
-        {{image.width}}
-        <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" [width]="image.width" [height]="image.height" alt="">
+      <div *ngFor="let image of row" class="img-wrapper"  [style.width.px]="image.width" [style.height.px]="image.height">
+        <a [routerLink]="['./', image.id]">
+          <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" [width]="image.width" [height]="image.height" alt="">
+        </a>
       </div>
     </div>
   </div>
 </ng-container>
-
-
-<div *ngIf="rows$ | async as rows">
-  <div class="rows-wrapper">
-    <div *ngFor="let row of rows" class="row">
-      <div *ngFor="let image of row" class="img-wrapper">
-        {{image.width}}
-        <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" [width]="image.width" [height]="image.height" alt="">
-      </div>
-    </div>
-  </div>
-</div> -->
 
 <section>
   <input #takeInput type="number" [value]="take$ | async" (blur)="onTakeBlur(takeInput.value)" min="1" max="1000" />
