@@ -10,7 +10,7 @@ import { ItemInfo } from '../../dto/item-info';
   selector: 'glr-image-popup',
   templateUrl: './image-popup.component.html',
   styleUrls: ['./image-popup.component.scss'],
-  encapsulation: ViewEncapsulation.ShadowDom,
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class ImagePopupComponent {
   

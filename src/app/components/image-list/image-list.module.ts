@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ImageListRoutingModule } from './image-list.routing.module';
 import { ImagePopupModule } from '../image-popup/image-popup.module';
 import { ImageListDumbComponent } from './image-list-dumb.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import { ImageListDumbComponent } from './image-list-dumb.component';
     BrowserModule,
     RouterModule,
     ImagePopupModule,
-    ImageListRoutingModule
+    ImageListRoutingModule,MatIconModule
   ]
 })
 export class ImageListModule {}

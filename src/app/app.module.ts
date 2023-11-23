@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ImageModule } from './components/image/image.module';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     ImageModule,
     ImageListModule, 
-    AppRoutingModule
+    AppRoutingModule, BrowserAnimationsModule, MatIconModule
   ],
   bootstrap: [
     AppComponent
