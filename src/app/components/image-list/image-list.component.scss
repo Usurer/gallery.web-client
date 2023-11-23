@@ -36,7 +36,7 @@ img {
     vertical-align: bottom;
 }
 
-glr-image-popup {
+::ng-deep glr-image-popup {
     position: fixed;
     top: 0;
     left: 0;
