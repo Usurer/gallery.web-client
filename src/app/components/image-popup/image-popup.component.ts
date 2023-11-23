@@ -3,6 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { EMPTY, Observable, filter, of, switchMap } from 'rxjs';
 import { ClickNotificationService } from '../../services/click-notification.service';
 import { ImageComponent } from '../image/image.component';
+import { HttpClient } from '@angular/common/http';
+import { ItemInfo } from '../../dto/item-info';
 
 @Component({
   selector: 'glr-image-popup',
@@ -24,18 +26,23 @@ export class ImagePopupComponent {
   @ViewChild(ImageComponent, { read: ElementRef })
   imageComponent: ElementRef | undefined;
   
-  public id$: Observable<string>;
+  public itemInfo$: Observable<ItemInfo>;
 
   constructor(
     private route: ActivatedRoute,
     private clickNotification: ClickNotificationService,
+    private http: HttpClient
   ) {
-    this.id$ = this.route.paramMap.pipe(
+    this.itemInfo$ = this.route.paramMap.pipe(
       switchMap((x: ParamMap) => {
-        if (x.has('id')) return of(x.get('id'));
+        if (x.has('id')) {
+          const id = x.get('id');
+          return this.http.get<ItemInfo>('http://localhost:5279/api/Meta/GetItemMetadata?id=' + id);
+        }
+        
         return EMPTY;
       }),
-      filter((x): x is NonNullable<string> => !!x)
+      filter((x): x is NonNullable<ItemInfo> => !!x)
     );
   }
 }

@@ -2,7 +2,7 @@
     background-color: rgba($color: #eaeaea, $alpha: 0.5);
     display: block;
     height: 90vh;
-    overflow: scroll;
+    overflow-y: scroll;
 
     &::-webkit-scrollbar {
         width: 15px;

@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ImageModule } from './components/image/image.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ImageModule } from './components/image/image.module';
   imports: [
     CommonModule,
     BrowserModule, 
+    HttpClientModule,
     ImageModule,
     ImageListModule, 
     AppRoutingModule

@@ -29,4 +29,9 @@ constructor(
     this.query = `http://localhost:5279/Images/GetImage?id=${value}`;
   }
 
+  @Input()
+  width: number | undefined;
+
+  @Input()
+  height: number | undefined;
 }
