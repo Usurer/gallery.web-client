@@ -11,7 +11,7 @@ import { ClickNotificationService } from '../../services/click-notification.serv
   selector: 'glr-image-list-dumb',
   templateUrl: './image-list-dumb.component.html',
   styleUrls: ['./image-list-dumb.component.scss'],
-  encapsulation: ViewEncapsulation.ShadowDom,
+  encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ClickNotificationService]
 })

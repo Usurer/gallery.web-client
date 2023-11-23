@@ -24,7 +24,7 @@ import { GalleryLayoutService } from '../../services/gallery-layout.service';
   selector: 'glr-image-list',
   templateUrl: './image-list.component.html',
   styleUrls: ['./image-list.component.scss'],
-  encapsulation: ViewEncapsulation.ShadowDom,
+  encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ClickNotificationService]
 })
