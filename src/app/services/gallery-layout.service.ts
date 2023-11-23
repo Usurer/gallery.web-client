@@ -21,8 +21,9 @@ export class GalleryLayoutService {
         const rowHeight = 200;
 
         for(let i = 0; i < images.length; i++) {
-            const current = images[i];
-            const next = i < images.length - 1 ? images[i + 1] : current;
+            const current = {
+                ...images[i]
+            };
 
             if (!current.width || !current.height) 
                 continue;
