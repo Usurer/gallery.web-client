@@ -14,7 +14,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
-import { BehaviorSubject, Observable, Subject, Subscription, combineLatest, debounce, debounceTime, distinct, distinctUntilChanged, filter, first, map, mergeMap, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, combineLatest, debounce, debounceTime, distinct, distinctUntilChanged, filter, first, map, mergeMap, of, startWith, switchMap, tap } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
 import { Router, RouterEvent } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
@@ -29,6 +29,8 @@ import { GalleryLayoutService } from '../../services/gallery-layout.service';
   providers: [ClickNotificationService]
 })
 export class ImageListComponent implements OnInit, OnDestroy {
+
+  messages = [1, 2, 3, 4, 5];
 
   overlayClickSubscription: Subscription | undefined;
 
@@ -55,6 +57,11 @@ export class ImageListComponent implements OnInit, OnDestroy {
     switchMap(size => this.images$.pipe(    
       map((images) => this.galleryLayout.defineRows(images, size)),
     )),
+  );
+
+  readonly hasRows$ = this.rows$.pipe(
+    map(x => x && x.length > 0), 
+    startWith(false)
   );
 
   constructor(

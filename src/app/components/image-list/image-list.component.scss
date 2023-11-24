@@ -2,7 +2,8 @@
     background-color: rgba($color: #eaeaea, $alpha: 0.5);
     display: block;
     height: 90vh;
-    overflow-y: scroll;
+    // overflow-y: scroll;
+    overflow: hidden;
 
     &::-webkit-scrollbar {
         width: 15px;
@@ -63,3 +64,13 @@ img {
 .img-wrapper {
     margin: 2px;
 }
+
+.example-viewport {
+    height: 200px;
+    width: 200px;
+    border: 1px solid black;
+  }
+  
+  .example-item {
+    height: 50px;
+  }

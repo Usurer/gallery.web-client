@@ -7,6 +7,7 @@ import { ImageListRoutingModule } from './image-list.routing.module';
 import { ImagePopupModule } from '../image-popup/image-popup.module';
 import { ImageListDumbComponent } from './image-list-dumb.component';
 import { MatIconModule } from '@angular/material/icon';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
     BrowserModule,
     RouterModule,
     ImagePopupModule,
-    ImageListRoutingModule,MatIconModule
+    ImageListRoutingModule,MatIconModule, ScrollingModule
   ]
 })
 export class ImageListModule {}
