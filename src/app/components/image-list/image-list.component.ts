@@ -97,7 +97,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
               });
             });
             resizeObserver.observe(wrapperEl);
-          })
+          }),
+          first()
         ).subscribe(); 
       }
     });
