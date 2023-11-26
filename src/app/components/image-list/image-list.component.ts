@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -14,11 +13,16 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
-import { BehaviorSubject, Observable, Subject, Subscription, combineLatest, debounce, debounceTime, distinct, distinctUntilChanged, filter, first, map, mergeMap, of, startWith, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest, debounceTime, distinctUntilChanged, filter, first, map, startWith, switchMap, tap, withLatestFrom } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
-import { Router, RouterEvent } from '@angular/router';
+import { Router } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
 import { GalleryLayoutService } from '../../services/gallery-layout.service';
+
+type RowInfo = {
+  row: ItemInfo[],
+  visible: boolean
+}
 
 @Component({
   selector: 'glr-image-list',
@@ -30,7 +34,7 @@ import { GalleryLayoutService } from '../../services/gallery-layout.service';
 })
 export class ImageListComponent implements OnInit, OnDestroy {
 
-  messages = [1, 2, 3, 4, 5];
+  private topPosition$ = new BehaviorSubject<number>(0);
 
   overlayClickSubscription: Subscription | undefined;
 
@@ -44,6 +48,11 @@ export class ImageListComponent implements OnInit, OnDestroy {
   @ViewChildren("rowsWrapper")
   rowsWrapper: QueryList<ElementRef> | undefined;
 
+  @HostListener('scroll', ['$event.target'])
+  handleScroll(element: HTMLElement): void {
+    this.topPosition$.next(element.scrollTop);
+  }
+
   readonly images$: Observable<ItemInfo[]> = this.imagesStore
     .select(state => state.images)
     .pipe(
@@ -51,12 +60,43 @@ export class ImageListComponent implements OnInit, OnDestroy {
       filter(x => x.length > 0)
     );
 
-  readonly rows$: Observable<ItemInfo[][]> = this.resizeSubject$.pipe(
+  readonly resizeNotificator$ = this.resizeSubject$.pipe(
     debounceTime(100),
-    distinctUntilChanged(),
+    distinctUntilChanged()
+  );
+  
+  readonly rows$: Observable<ItemInfo[][]> = this.resizeNotificator$.pipe(
     switchMap(size => this.images$.pipe(    
       map((images) => this.galleryLayout.defineRows(images, size)),
     )),
+  );
+
+  readonly rowsVisibility$: Observable<RowInfo[]> = combineLatest([this.topPosition$.pipe(debounceTime(200)), this.rows$]).pipe(
+    map(([scrollTop, rows]) => {
+      const result = [];
+      const rowHeight = (rows[0][0].height ?? 0) + 4;
+      
+      const wrapperEl = this.viewContainerRef.element.nativeElement;
+      const wrapperHeight = wrapperEl.clientHeight ?? wrapperEl.getBoundingClientRect().height;
+      const rowsInView = Math.ceil(wrapperHeight / rowHeight);
+
+      const visibilityStartIdx = Math.floor(scrollTop / rowHeight) - rowsInView;
+      const visibilityEndIdx = visibilityStartIdx + rowsInView * 2;
+
+
+      console.log(`Visibility idx is ${visibilityStartIdx}`);
+
+      for(let i = 0; i < rows.length; i++) {
+        
+        const rowInfo: RowInfo = {
+          row: rows[i],
+          visible: i >= visibilityStartIdx && i <= visibilityEndIdx
+        }
+        result.push(rowInfo);
+      }
+
+      return result;
+    }),
   );
 
   readonly hasRows$ = this.rows$.pipe(
@@ -82,9 +122,15 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.attachResizeObserver();    
+
+    this.rowsVisibility$.subscribe();
+  }
+
+  private attachResizeObserver() {
     this.rows$.pipe(
       filter(x => x.length > 0),
-      first(),
+      first()
     ).subscribe({
       next: () => {
         this.rowsWrapper?.changes.pipe(
@@ -99,7 +145,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
             resizeObserver.observe(wrapperEl);
           }),
           first()
-        ).subscribe(); 
+        ).subscribe();
       }
     });
   }

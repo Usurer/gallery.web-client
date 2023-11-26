@@ -1,34 +1,14 @@
-<mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="home"></mat-icon>
-
-<!-- <cdk-virtual-scroll-viewport [itemSize]="50" class="example-viewport">
-  <div *cdkVirtualFor="let item of messages" class="example-item">{{item}}</div>
-</cdk-virtual-scroll-viewport> -->
-
-<ng-container *ngIf="rows$ | async as rows">
-  <cdk-virtual-scroll-viewport [itemSize]="rows[0][0].height" #rowsWrapper class="rows-wrapper" [style.width.%]="100" [style.height.%]="85">
-    <div *cdkVirtualFor="let row of rows" class="row" [style.height.px]="rows[0][0].height">
-      <div *ngFor="let image of row" class="img-wrapper"  [style.width.px]="image.width" [style.height.px]="image.height">
-        <a [routerLink]="['./', image.id]">
-          <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" alt="">
-        </a>
-      </div>
-    </div>
-
-  </cdk-virtual-scroll-viewport>
-</ng-container>
-
-
-<!-- <ng-container *ngIf="false && rows$ | async as rows">
+<ng-container *ngIf="rowsVisibility$ | async as rowsInfo">
   <div #rowsWrapper class="rows-wrapper">
-    <div *ngFor="let row of rows" class="row">
-      <div *ngFor="let image of row" class="img-wrapper"  [style.width.px]="image.width" [style.height.px]="image.height">
+    <div *ngFor="let rowInfo of rowsInfo" class="row">
+      <div *ngFor="let image of rowInfo.row" class="img-wrapper"  [style.width.px]="image.width" [style.height.px]="image.height">
         <a [routerLink]="['./', image.id]">
-          <img src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" alt="">
+          <img *ngIf="rowInfo.visible" src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" alt="">
         </a>
       </div>
     </div>
   </div>
-</ng-container> -->
+</ng-container>
 
 <ng-container *ngIf="(hasRows$ | async) === false">
   <section>
@@ -36,12 +16,5 @@
     <button (click)="onTakePageClick()">Load {{take$ | async}} images</button>
     <button (click)="onRepeatClick()">Repeat latest</button>
   </section>
-
-  <nav>
-    <a [routerLink]="['/image', '6']" routerLinkActive="active" ariaCurrentWhenActive="page">Image 6</a>
-    <a [routerLink]="['/image', '8']" routerLinkActive="active" ariaCurrentWhenActive="page">Image 8</a>
-    <a routerLink="/placeholder" routerLinkActive="active" ariaCurrentWhenActive="page">Placeholder</a>
-  </nav>
-</ng-container>
 
 <router-outlet></router-outlet>
