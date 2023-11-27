@@ -182,6 +182,13 @@ export class ImageListComponent implements OnInit, OnDestroy {
         this.takeinput.nativeElement.value = this.take$.value + '';
       }
     }
-    
+  }
+
+  trackImage(idx: number, itemInfo: ItemInfo): string {
+    return `${itemInfo.id}`;
+  }
+
+  trackRow(idx: number, rowInfo: RowInfo): string {
+    return `${idx}_${rowInfo.rowHeight}_${rowInfo.visible}`;
   }
 }
