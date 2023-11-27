@@ -18,10 +18,12 @@ import { ItemInfo } from '../../dto/item-info';
 import { Router } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
 import { GalleryLayoutService } from '../../services/gallery-layout.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 type RowInfo = {
   row: ItemInfo[],
-  visible: boolean
+  visible: boolean,
+  rowHeight: number
 }
 
 @Component({
@@ -30,7 +32,18 @@ type RowInfo = {
   styleUrls: ['./image-list.component.scss'],
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ClickNotificationService]
+  providers: [ClickNotificationService],
+  animations: [
+    trigger('myInsertRemoveTrigger', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('100ms', style({ opacity: 0 }))
+      ])
+    ]),
+  ]
 })
 export class ImageListComponent implements OnInit, OnDestroy {
 
@@ -90,7 +103,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
         
         const rowInfo: RowInfo = {
           row: rows[i],
-          visible: i >= visibilityStartIdx && i <= visibilityEndIdx
+          visible: i >= visibilityStartIdx && i <= visibilityEndIdx,
+          rowHeight: rowHeight
         }
         result.push(rowInfo);
       }
