@@ -19,7 +19,9 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     BrowserModule,
     RouterModule,
     ImagePopupModule,
-    ImageListRoutingModule,MatIconModule, ScrollingModule
+    ImageListRoutingModule,
+    MatIconModule, 
+    ScrollingModule
   ]
 })
 export class ImageListModule {}
