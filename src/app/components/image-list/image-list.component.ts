@@ -13,12 +13,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ImageListStore } from '../../services/image-list.store';
-import { BehaviorSubject, Observable, Subscription, combineLatest, debounceTime, distinctUntilChanged, filter, first, map, startWith, switchMap, tap, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, combineLatest, debounceTime, distinctUntilChanged, filter, first, map, skip, startWith, switchMap, tap, withLatestFrom } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
 import { Router } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
-import { GalleryLayoutService } from '../../services/gallery-layout.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { GalleryLayoutService } from '../../services/gallery-layout.service';
 
 type RowInfo = {
   row: ItemInfo[],
@@ -54,6 +54,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
   take$ = new BehaviorSubject<number>(990);
 
   resizeSubject$ = new BehaviorSubject<number>(500);
+
+  imageLoadComplete$ = new Subject<boolean>();
 
   @ViewChild('takeInput')
   takeinput: ElementRef<HTMLInputElement> | undefined;
@@ -118,6 +120,22 @@ export class ImageListComponent implements OnInit, OnDestroy {
     startWith(false)
   );
 
+  readonly imagePreloadStream$ = this.rowsVisibility$.pipe(
+    switchMap((rows) => {
+      const visibleRowItems = rows.filter(r => r.visible).flatMap(r => r.row);
+      const skipCount = visibleRowItems.length / 3 * 2;
+      return this.imageLoadComplete$.pipe(
+        tap(() => {
+          console.log(`Image loaded, skipping ${skipCount}`)
+        }),
+        skip(skipCount),
+        tap(() => {
+          console.log(`skipped ${skipCount}`)
+        })
+      );
+    })
+  );
+
   constructor(
     private readonly imagesStore: ImageListStore,
     private galleryLayout: GalleryLayoutService,
@@ -139,6 +157,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
     this.attachResizeObserver();    
 
     this.rowsVisibility$.subscribe();
+
+    this.imagePreloadStream$.subscribe();
   }
 
   private attachResizeObserver() {
@@ -190,5 +210,10 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   trackRow(idx: number, rowInfo: RowInfo): string {
     return `${idx}_${rowInfo.rowHeight}_${rowInfo.visible}`;
+  }
+
+  onCompleteEvent($e: any): void {
+    // console.info($e);
+    this.imageLoadComplete$.next(true);
   }
 }

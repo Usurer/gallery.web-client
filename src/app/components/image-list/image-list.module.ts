@@ -8,11 +8,14 @@ import { ImagePopupModule } from '../image-popup/image-popup.module';
 import { ImageListDumbComponent } from './image-list-dumb.component';
 import { MatIconModule } from '@angular/material/icon';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import { DirectivesModule } from '../../directives/directives.module';
+import { HighlightDirective } from './test-directive';
 
 @NgModule({
   declarations: [
     ImageListComponent,
-    ImageListDumbComponent
+    ImageListDumbComponent,
+    HighlightDirective
   ],
   imports: [
     CommonModule,
@@ -21,7 +24,8 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     ImagePopupModule,
     ImageListRoutingModule,
     MatIconModule, 
-    ScrollingModule
+    ScrollingModule,
+    DirectivesModule
   ]
 })
 export class ImageListModule {}

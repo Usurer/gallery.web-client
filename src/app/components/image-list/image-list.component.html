@@ -3,7 +3,7 @@
     <div *ngFor="let rowInfo of rowsInfo; trackBy: trackRow" class="row">
       <div *ngFor="let image of rowInfo.row; trackBy: trackImage" class="img-wrapper"  [style.width.px]="image.width" [style.height.px]="image.height">
         <a [routerLink]="['./', image.id]">
-          <img *ngIf="rowInfo.visible" @myInsertRemoveTrigger loading="lazy" src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" alt="">
+          <img glrNotifyChange (completeEvent)="onCompleteEvent($event)" *ngIf="rowInfo.visible" @myInsertRemoveTrigger loading="lazy" src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" alt="">
         </a>
       </div>
     </div>
