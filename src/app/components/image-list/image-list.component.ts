@@ -136,9 +136,11 @@ export class ImageListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.attachResizeObserver();    
+    this.attachResizeObserver();
 
     this.rowsVisibility$.subscribe();
+
+    this.imagesStore.getImages(this.take$ ?? 10);
   }
 
   private attachResizeObserver() {
@@ -162,26 +164,6 @@ export class ImageListComponent implements OnInit, OnDestroy {
         ).subscribe();
       }
     });
-  }
-
-  onTakePageClick() {
-    this.imagesStore.getImages(this.take$ ?? 10);
-  }
-
-  onRepeatClick() {
-    this.imagesStore.repeatGetImages(this.take$ ?? 10);
-  }
-
-  onTakeBlur(value: string): void {
-    const val = parseInt(value);
-    if (!Number.isNaN(val))
-    {
-      this.take$.next(val);
-    } else {
-      if (this.takeinput) {
-        this.takeinput.nativeElement.value = this.take$.value + '';
-      }
-    }
   }
 
   trackImage(idx: number, itemInfo: ItemInfo): string {
