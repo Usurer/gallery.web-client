@@ -11,30 +11,29 @@ import { ImageModule } from './components/image/image.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
+import { FolderExplorerModule } from './components/folder-explorer/folder-explorer.module';
 
 @NgModule({
-  declarations: [
-    PlaceholderComponent, 
-    AppComponent
-  ],
-  imports: [
-    CommonModule,
-    BrowserModule, 
-    HttpClientModule,
-    ImageModule,
-    ImageListModule, 
-    AppRoutingModule, BrowserAnimationsModule, MatIconModule
-  ],
-  bootstrap: [
-    AppComponent
-  ],
+    declarations: [PlaceholderComponent, AppComponent],
+    imports: [
+        CommonModule,
+        BrowserModule,
+        HttpClientModule,
+        ImageModule,
+        ImageListModule,
+        FolderExplorerModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatIconModule,
+    ],
+    bootstrap: [AppComponent],
 })
 export class AppModule {
-  // Diagnostic only: inspect router configuration
-  constructor(router: Router) {
-    // Use a custom replacer to display function names in the route configs
-    const replacer = (key: any, value: any) => (typeof value === 'function') ? value.name : value;
+    // Diagnostic only: inspect router configuration
+    constructor(router: Router) {
+        // Use a custom replacer to display function names in the route configs
+        const replacer = (key: any, value: any) => (typeof value === 'function' ? value.name : value);
 
-    console.log('Routes: ', JSON.stringify(router.config, replacer, 2));
-  }
+        console.log('Routes: ', JSON.stringify(router.config, replacer, 2));
+    }
 }
