@@ -135,7 +135,6 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const numberOfScrolledRows = Math.floor(scrollTop / rowHeight);
 
-        // TODO: This doesn't work and the very first row (the one that can be cutoff) is never visible
         const visibilityStartIdx = numberOfScrolledRows - rowsInView * 2;
         const visibilityEndIdx = numberOfScrolledRows + rowsInView * 2;
 
