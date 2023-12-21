@@ -85,30 +85,7 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly rowsVisibility$: Observable<RowInfo[]> = combineLatest([this.topPosition$.pipe(debounceTime(200)), this.rows$]).pipe(
     map(([scrollTop, rows]) => {
-      const result = [];
-      const rowHeight = (rows[0][0].height ?? 0) + 4;
-      
-      const wrapperEl = this.viewContainerRef.element.nativeElement;
-      const wrapperHeight = wrapperEl.clientHeight ?? wrapperEl.getBoundingClientRect().height;
-      const rowsInView = Math.ceil(wrapperHeight / rowHeight);
-
-      const visibilityStartIdx = Math.floor(scrollTop / rowHeight) - rowsInView;
-      const visibilityEndIdx = visibilityStartIdx + rowsInView * 2;
-
-
-      console.log(`Visibility idx is ${visibilityStartIdx}`);
-
-      for(let i = 0; i < rows.length; i++) {
-        
-        const rowInfo: RowInfo = {
-          row: rows[i],
-          visible: i >= visibilityStartIdx && i <= visibilityEndIdx,
-          rowHeight: rowHeight
-        }
-        result.push(rowInfo);
-      }
-
-      return result;
+      return this.setRowsVisibility(scrollTop, rows);
     }),
   );
 
@@ -122,8 +99,8 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
     private galleryLayout: GalleryLayoutService,
     private zone: NgZone,
     private readonly router: Router,
-    private clickNotification: ClickNotificationService,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    clickNotification: ClickNotificationService,
   ) {
     this.overlayClickSubscription = clickNotification.clicks.subscribe({
       next: (value) => this.router.navigate(['../'])
@@ -156,6 +133,30 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
     
     const wrapperEl = this.viewContainerRef.element.nativeElement;
     this.resizeObserver.observe(wrapperEl);
+  }
+
+  private setRowsVisibility(scrollTop: number, rows: ItemInfo[][]): RowInfo[] {
+    const result = [];
+    const rowHeight = (rows[0][0].height ?? 0) + 4;
+    
+    const wrapperEl = this.viewContainerRef.element.nativeElement;
+    const wrapperHeight = wrapperEl.clientHeight ?? wrapperEl.getBoundingClientRect().height;
+    const rowsInView = Math.ceil(wrapperHeight / rowHeight);
+
+    const visibilityStartIdx = Math.floor(scrollTop / rowHeight) - rowsInView;
+    const visibilityEndIdx = visibilityStartIdx + rowsInView * 2;
+
+    for(let i = 0; i < rows.length; i++) {
+      
+      const rowInfo: RowInfo = {
+        row: rows[i],
+        visible: i >= visibilityStartIdx && i <= visibilityEndIdx,
+        rowHeight: rowHeight
+      }
+      result.push(rowInfo);
+    }
+
+    return result;
   }
 
   trackImage(idx: number, itemInfo: ItemInfo): string {
