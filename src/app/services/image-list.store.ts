@@ -38,13 +38,15 @@ export class ImageListStore extends ComponentStore<ImagesState> {
                         // TODO: Can we do it in a better way pls?
                         (imageList) =>
                             imageList.json().then((x: ItemInfo[]) => {
-                                this.addItems(
-                                    x.filter(
-                                        (k) =>
-                                            k.name.toLowerCase().endsWith('jpg') ||
-                                            k.name.toLowerCase().endsWith('jpeg')
-                                    )
-                                );
+                                if (x && x.length > 0) {
+                                    this.addItems(
+                                        x.filter(
+                                            (k) =>
+                                                k.name.toLowerCase().endsWith('jpg') ||
+                                                k.name.toLowerCase().endsWith('jpeg')
+                                        )
+                                    );
+                                }
                             }),
                         (error) => {
                             console.log(error);
