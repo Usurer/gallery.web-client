@@ -8,6 +8,12 @@ export interface ImagesState {
     images: ItemInfo[];
 }
 
+export interface ListItemsQuery {
+    parentId: number;
+    take: number;
+    skip: number;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -16,13 +22,13 @@ export class ImageListStore extends ComponentStore<ImagesState> {
         super({ images: [] });
     }
 
-    readonly getImages = this.effect((take$: Observable<number>) => {
-        return take$.pipe(
+    readonly getImages = this.effect((query$: Observable<ListItemsQuery>) => {
+        return query$.pipe(
             withLatestFrom(this.select((state) => state.images)),
-            switchMap(([take, images]) => {
+            switchMap(([query, images]) => {
                 return fromFetch(
-                    `http://localhost:5279/Images/ListItems?parentId=${118}&take=${take ?? 10}&skip=${
-                        images.length ?? 0
+                    `http://localhost:5279/Images/ListItems?parentId=${query.parentId}&take=${query.take ?? 10}&skip=${
+                        query.skip ?? images.length ?? 0
                     }`,
                     {
                         cache: 'force-cache',
