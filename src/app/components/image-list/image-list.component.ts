@@ -60,24 +60,16 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private resizeObserver?: ResizeObserver;
     private resizeSubject$ = new BehaviorSubject<number>(500);
+    readonly resizeNotificator$ = this.resizeSubject$.pipe(debounceTime(100), distinctUntilChanged());
 
     private overlayClickSubscription?: Subscription;
-
-    private take$ = new BehaviorSubject<number>(1000);
-
-    @HostListener('scroll', ['$event.target'])
-    handleScroll(element: HTMLElement): void {
-        this.topPosition$.next(element.scrollTop);
-    }
 
     readonly images$: Observable<ItemInfo[]> = this.imagesStore
         .select((state) => state.images)
         .pipe(filter((x) => x.length > 0));
 
-    readonly resizeNotificator$ = this.resizeSubject$.pipe(debounceTime(100), distinctUntilChanged());
-
     readonly rows$: Observable<ItemInfo[][]> = this.resizeNotificator$.pipe(
-        switchMap((size) => this.images$.pipe(map((images) => this.galleryLayout.defineRows(images, size))))
+        switchMap((size) => this.images$.pipe(map((images) => this.galleryLayoutService.defineRows(images, size))))
     );
 
     readonly rowsVisibility$: Observable<RowInfo[]> = combineLatest([
@@ -90,20 +82,25 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
     );
 
     readonly hasRows$ = this.rows$.pipe(
-        map((x) => x && x.length > 0),
+        map((x) => x?.length > 0),
         startWith(false)
     );
 
+    @HostListener('scroll', ['$event.target'])
+    handleScroll(element: HTMLElement): void {
+        this.topPosition$.next(element.scrollTop);
+    }
+
     constructor(
         private readonly imagesStore: ImageListStore,
-        private galleryLayout: GalleryLayoutService,
-        private zone: NgZone,
+        private readonly galleryLayoutService: GalleryLayoutService,
+        private readonly zone: NgZone,
         private readonly router: Router,
-        private viewContainerRef: ViewContainerRef,
+        private readonly viewContainerRef: ViewContainerRef,
         clickNotification: ClickNotificationService
     ) {
         this.overlayClickSubscription = clickNotification.clicks.subscribe({
-            next: (value) => this.router.navigate(['../']),
+            next: () => this.router.navigate(['../']),
         });
     }
 
@@ -113,9 +110,7 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit(): void {
-        this.rowsVisibility$.subscribe();
-
-        this.imagesStore.getImages(this.take$ ?? 10);
+        this.imagesStore.getImages(1000);
     }
 
     ngAfterViewInit() {
