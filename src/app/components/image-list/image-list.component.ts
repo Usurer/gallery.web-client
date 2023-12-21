@@ -57,16 +57,13 @@ type RowInfo = {
 })
 export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
     private topPosition$ = new BehaviorSubject<number>(0);
+
     private resizeObserver?: ResizeObserver;
+    private resizeSubject$ = new BehaviorSubject<number>(500);
 
-    overlayClickSubscription: Subscription | undefined;
+    private overlayClickSubscription?: Subscription;
 
-    take$ = new BehaviorSubject<number>(990);
-
-    resizeSubject$ = new BehaviorSubject<number>(500);
-
-    @ViewChild('takeInput')
-    takeinput?: ElementRef<HTMLInputElement>;
+    private take$ = new BehaviorSubject<number>(1000);
 
     @HostListener('scroll', ['$event.target'])
     handleScroll(element: HTMLElement): void {
@@ -75,10 +72,7 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     readonly images$: Observable<ItemInfo[]> = this.imagesStore
         .select((state) => state.images)
-        .pipe(
-            map((x) => x.filter((k) => k.name.toLowerCase().endsWith('jpg') || k.name.toLowerCase().endsWith('jpeg'))),
-            filter((x) => x.length > 0)
-        );
+        .pipe(filter((x) => x.length > 0));
 
     readonly resizeNotificator$ = this.resizeSubject$.pipe(debounceTime(100), distinctUntilChanged());
 
