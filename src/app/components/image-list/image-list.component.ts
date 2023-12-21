@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
@@ -45,9 +46,10 @@ type RowInfo = {
     ]),
   ]
 })
-export class ImageListComponent implements OnInit, OnDestroy {
+export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private topPosition$ = new BehaviorSubject<number>(0);
+  private resizeObserver?: ResizeObserver;
 
   overlayClickSubscription: Subscription | undefined;
 
@@ -56,10 +58,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
   resizeSubject$ = new BehaviorSubject<number>(500);
 
   @ViewChild('takeInput')
-  takeinput: ElementRef<HTMLInputElement> | undefined;
-
-  @ViewChildren("rowsWrapper")
-  rowsWrapper: QueryList<ElementRef> | undefined;
+  takeinput?: ElementRef<HTMLInputElement>;
 
   @HostListener('scroll', ['$event.target'])
   handleScroll(element: HTMLElement): void {
@@ -133,37 +132,30 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.overlayClickSubscription?.unsubscribe();
+    this.resizeObserver?.disconnect();
   }
 
   ngOnInit(): void {
-    this.attachResizeObserver();
-
     this.rowsVisibility$.subscribe();
 
     this.imagesStore.getImages(this.take$ ?? 10);
   }
 
+  ngAfterViewInit() {
+    this.attachResizeObserver();
+  }
+
   private attachResizeObserver() {
-    this.rows$.pipe(
-      filter(x => x.length > 0),
-      first()
-    ).subscribe({
-      next: () => {
-        this.rowsWrapper?.changes.pipe(
-          tap(() => {
-            const wrapperEl = this.viewContainerRef.element.nativeElement;
-            const resizeObserver = new ResizeObserver(el => {
-              this.zone.run(() => {
-                const width = wrapperEl.clientWidth ?? wrapperEl.getBoundingClientRect().width;
-                this.resizeSubject$.next(width - 15);
-              });
-            });
-            resizeObserver.observe(wrapperEl);
-          }),
-          first()
-        ).subscribe();
-      }
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const first = entries[0];
+      this.zone.run(() => {
+        const width = first.contentRect.width;
+        this.resizeSubject$.next(width - 15);
+      });
     });
+    
+    const wrapperEl = this.viewContainerRef.element.nativeElement;
+    this.resizeObserver.observe(wrapperEl);
   }
 
   trackImage(idx: number, itemInfo: ItemInfo): string {

@@ -14,7 +14,7 @@ const APP_ROUTES: Route[] = [
     imports: [
       RouterModule.forRoot(
         APP_ROUTES,
-        { enableTracing: true } // <-- debugging purposes only
+        { enableTracing: false } // <-- debugging purposes only
       ),
       ImageListModule
     ],
