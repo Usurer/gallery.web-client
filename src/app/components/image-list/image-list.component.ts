@@ -68,22 +68,17 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
         .select((state) => state.images)
         .pipe(filter((x) => x.length > 0));
 
-    readonly rows$: Observable<ItemInfo[][]> = this.resizeNotificator$.pipe(
-        switchMap((size) => this.images$.pipe(map((images) => this.galleryLayoutService.defineRows(images, size))))
+    readonly itemsAsRows$: Observable<ItemInfo[][]> = this.resizeNotificator$.pipe(
+        switchMap((size) => this.images$.pipe(map((images) => this.galleryLayoutService.groupIntoRows(images, size))))
     );
 
-    readonly rowsVisibility$: Observable<RowInfo[]> = combineLatest([
+    readonly rowsInfo$: Observable<RowInfo[]> = combineLatest([
         this.topPosition$.pipe(debounceTime(200)),
-        this.rows$,
+        this.itemsAsRows$,
     ]).pipe(
         map(([scrollTop, rows]) => {
             return this.setRowsVisibility(scrollTop, rows);
         })
-    );
-
-    readonly hasRows$ = this.rows$.pipe(
-        map((x) => x?.length > 0),
-        startWith(false)
     );
 
     @HostListener('scroll', ['$event.target'])
@@ -138,8 +133,11 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
         const wrapperHeight = wrapperEl.clientHeight ?? wrapperEl.getBoundingClientRect().height;
         const rowsInView = Math.ceil(wrapperHeight / rowHeight);
 
-        const visibilityStartIdx = Math.floor(scrollTop / rowHeight) - rowsInView;
-        const visibilityEndIdx = visibilityStartIdx + rowsInView * 2;
+        const numberOfScrolledRows = Math.floor(scrollTop / rowHeight);
+
+        // TODO: This doesn't work and the very first row (the one that can be cutoff) is never visible
+        const visibilityStartIdx = numberOfScrolledRows - rowsInView * 2;
+        const visibilityEndIdx = numberOfScrolledRows + rowsInView * 2;
 
         for (let i = 0; i < rows.length; i++) {
             const rowInfo: RowInfo = {
