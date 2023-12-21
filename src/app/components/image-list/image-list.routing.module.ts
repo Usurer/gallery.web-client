@@ -1,23 +1,19 @@
 import {
     ActivatedRoute,
     ActivatedRouteSnapshot,
-    ResolveFn,
+    CanActivateFn,
     Route,
     Router,
     RouterModule,
     RouterStateSnapshot,
 } from '@angular/router';
 import { NgModule, inject } from '@angular/core';
-import { ImageComponent } from '../image/image.component';
 import { ImageListComponent } from './image-list.component';
 import { ImagePopupComponent } from '../image-popup/image-popup.component';
-import { CollectionMetadata, MetadataService } from '../../services/metadata.service';
-import { EMPTY, NEVER, Observable, map } from 'rxjs';
+import { MetadataService } from '../../services/metadata.service';
+import { map } from 'rxjs';
 
-const rootResolver: ResolveFn<Observable<CollectionMetadata>> = (
-    routeSnapshot: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-) => {
+const canActivate: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const router = inject(Router);
     const activatedRoute = inject(ActivatedRoute);
     const rootId = Number.parseInt(routeSnapshot.paramMap.get('rootId') ?? '');
@@ -27,7 +23,7 @@ const rootResolver: ResolveFn<Observable<CollectionMetadata>> = (
             if (isNaN(rootId) && x) {
                 router.navigate(['imagelist', x.rootId], { relativeTo: activatedRoute });
             }
-            return EMPTY;
+            return false;
         })
     );
 };
@@ -41,7 +37,7 @@ const ROUTES: Route[] = [
     {
         path: 'imagelist',
         component: ImageListComponent,
-        resolve: { someData: rootResolver },
+        canActivate: [canActivate],
     },
 ];
 
