@@ -4,6 +4,7 @@ import {
     Component,
     ElementRef,
     HostListener,
+    Input,
     NgZone,
     OnDestroy,
     OnInit,
@@ -30,7 +31,7 @@ import {
     withLatestFrom,
 } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
 import { GalleryLayoutService } from '../../services/gallery-layout.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -86,16 +87,20 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.topPosition$.next(element.scrollTop);
     }
 
+    @Input()
+    rootId!: number;
+
     constructor(
         private readonly imagesStore: ImageListStore,
         private readonly galleryLayoutService: GalleryLayoutService,
         private readonly zone: NgZone,
         private readonly router: Router,
+        private readonly route: ActivatedRoute,
         private readonly viewContainerRef: ViewContainerRef,
         clickNotification: ClickNotificationService
     ) {
         this.overlayClickSubscription = clickNotification.clicks.subscribe({
-            next: () => this.router.navigate(['../']),
+            next: () => this.router.navigate(['./'], { relativeTo: this.route }),
         });
     }
 
@@ -105,7 +110,11 @@ export class ImageListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit(): void {
-        this.imagesStore.getImages(1000);
+        this.imagesStore.getImages({
+            parentId: this.rootId,
+            take: 1000,
+            skip: 0,
+        });
     }
 
     ngAfterViewInit() {
