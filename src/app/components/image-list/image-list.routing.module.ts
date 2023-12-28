@@ -13,7 +13,7 @@ import { MetadataService } from '../../services/metadata.service';
 import { map } from 'rxjs';
 import { ImageListContainerComponent } from './image-list-container/image-list-container.component';
 
-const canActivate: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+const isRootIdSet: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const router = inject(Router);
     const activatedRoute = inject(ActivatedRoute);
     const rootId = Number.parseInt(routeSnapshot.paramMap.get('rootId') ?? '');
@@ -37,7 +37,7 @@ const ROUTES: Route[] = [
     {
         path: 'imagelist',
         component: ImageListContainerComponent,
-        canActivate: [canActivate],
+        canActivate: [isRootIdSet],
     },
 ];
 
