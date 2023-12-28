@@ -11,8 +11,8 @@ import { NgModule, inject } from '@angular/core';
 import { ImagePopupComponent } from '../image-popup/image-popup.component';
 import { MetadataService } from '../../services/metadata.service';
 import { map } from 'rxjs';
-import { ImageListContainerComponent } from './image-list-container/image-list-container.component';
 import { FOLDER_ROUTE } from '../../app-routes';
+import { FolderExplorerComponent } from './folder-explorer.component';
 
 const CURRENT_ROOT = FOLDER_ROUTE;
 
@@ -34,12 +34,12 @@ const isRootIdSet: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state
 const ROUTES: Route[] = [
     {
         path: `${CURRENT_ROOT}/:rootId`,
-        component: ImageListContainerComponent,
+        component: FolderExplorerComponent,
         children: [{ path: ':id', component: ImagePopupComponent }],
     },
     {
         path: CURRENT_ROOT,
-        component: ImageListContainerComponent,
+        component: FolderExplorerComponent,
         canActivate: [isRootIdSet],
     },
 ];
@@ -48,4 +48,4 @@ const ROUTES: Route[] = [
     imports: [RouterModule.forChild(ROUTES)],
     exports: [RouterModule],
 })
-export class ImageListRoutingModule {}
+export class FolderExplorerRoutingModule {}
