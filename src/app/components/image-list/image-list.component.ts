@@ -1,18 +1,7 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    Input,
-    ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { ItemInfo } from '../../dto/item-info';
-import { ClickNotificationService } from '../../services/click-notification.service';
 import { animate, style, transition, trigger } from '@angular/animations';
-
-type RowInfo = {
-    row: ItemInfo[];
-    visible: boolean;
-    rowHeight: number;
-};
+import { RowInfo } from './image-list-container.component';
 
 @Component({
     selector: 'glr-image-list',
@@ -20,7 +9,6 @@ type RowInfo = {
     styleUrls: ['./image-list.component.scss'],
     encapsulation: ViewEncapsulation.Emulated,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [ClickNotificationService],
     animations: [
         trigger('myInsertRemoveTrigger', [
             transition(':enter', [style({ opacity: 0 }), animate('300ms', style({ opacity: 1 }))]),
@@ -32,7 +20,7 @@ export class ImageListComponent {
     @Input()
     rowsInfo: RowInfo[] = [];
 
-    trackImage(idx: number, itemInfo: ItemInfo): string {
+    trackImage(_: number, itemInfo: ItemInfo): string {
         return `${itemInfo.id}`;
     }
 

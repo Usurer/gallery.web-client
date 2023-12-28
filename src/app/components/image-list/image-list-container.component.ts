@@ -27,7 +27,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
 import { GalleryLayoutService } from '../../services/gallery-layout.service';
 
-type RowInfo = {
+export type RowInfo = {
     row: ItemInfo[];
     visible: boolean;
     rowHeight: number;
