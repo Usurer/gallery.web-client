@@ -15,22 +15,12 @@ import {
     BehaviorSubject,
     Observable,
     Subscription,
-    combineLatest,
     debounceTime,
     distinctUntilChanged,
-    filter,
-    map,
-    switchMap,
 } from 'rxjs';
-import { ItemInfo } from '../../dto/item-info';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
-
-export type RowInfo = {
-    row: ItemInfo[];
-    visible: boolean;
-    rowHeight: number;
-};
+import { RowInfo } from './row-info';
 
 @Component({
     selector: 'glr-image-list-container',
@@ -44,24 +34,16 @@ export class ImageListContainerComponent implements OnInit, OnDestroy, AfterView
     private topPosition$ = new BehaviorSubject<number>(0);
 
     private resizeObserver?: ResizeObserver;
-    private resizeSubject$ = new BehaviorSubject<number>(500);
-    readonly resizeNotificator$ = this.resizeSubject$.pipe(debounceTime(100), distinctUntilChanged());
+    
+    private componentWidthSubject$ = new BehaviorSubject<number>(500);
+    readonly componentWidth$ = this.componentWidthSubject$.pipe(debounceTime(100), distinctUntilChanged());
 
     private overlayClickSubscription?: Subscription;
 
-    readonly images$: Observable<ItemInfo[]> = this.imagesStore
-        .select((state) => state.images)
-        .pipe(filter((x) => x.length > 0));
-
-    readonly itemsAsRows$: Observable<ItemInfo[][]> = this.imagesStore.resizeRows(this.resizeNotificator$);
-
-    readonly rowsInfo$: Observable<RowInfo[]> = combineLatest([
+    readonly rowsInfo$: Observable<RowInfo[]> = this.imagesStore.getVisibleRows(
+        this.componentWidth$,
         this.topPosition$.pipe(debounceTime(200)),
-        this.itemsAsRows$,
-    ]).pipe(
-        map(([scrollTop, rows]) => {
-            return this.setRowsVisibility(scrollTop, rows);
-        })
+        this.viewContainerRef.element.nativeElement
     );
 
     @HostListener('scroll', ['$event.target'])
@@ -107,36 +89,11 @@ export class ImageListContainerComponent implements OnInit, OnDestroy, AfterView
             const first = entries[0];
             this.zone.run(() => {
                 const width = first.contentRect.width;
-                this.resizeSubject$.next(width - 15);
+                this.componentWidthSubject$.next(width - 15);
             });
         });
 
         const wrapperEl = this.viewContainerRef.element.nativeElement;
         this.resizeObserver.observe(wrapperEl);
-    }
-
-    private setRowsVisibility(scrollTop: number, rows: ItemInfo[][]): RowInfo[] {
-        const result = [];
-        const rowHeight = (rows[0][0].height ?? 0) + 4;
-
-        const wrapperEl = this.viewContainerRef.element.nativeElement;
-        const wrapperHeight = wrapperEl.clientHeight ?? wrapperEl.getBoundingClientRect().height;
-        const rowsInView = Math.ceil(wrapperHeight / rowHeight);
-
-        const numberOfScrolledRows = Math.floor(scrollTop / rowHeight);
-
-        const visibilityStartIdx = numberOfScrolledRows - rowsInView * 2;
-        const visibilityEndIdx = numberOfScrolledRows + rowsInView * 2;
-
-        for (let i = 0; i < rows.length; i++) {
-            const rowInfo: RowInfo = {
-                row: rows[i],
-                visible: i >= visibilityStartIdx && i <= visibilityEndIdx,
-                rowHeight: rowHeight,
-            };
-            result.push(rowInfo);
-        }
-
-        return result;
     }
 }

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { ItemInfo } from '../../dto/item-info';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { RowInfo } from './image-list-container.component';
+import { RowInfo } from './row-info';
 
 @Component({
     selector: 'glr-image-list',
