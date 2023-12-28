@@ -1,8 +1,9 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { switchMap, catchError, Observable, EMPTY, withLatestFrom } from 'rxjs';
+import { switchMap, catchError, Observable, EMPTY, withLatestFrom, map } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ItemInfo } from '../../dto/item-info';
 import { HttpClient } from '@angular/common/http';
+import { GalleryLayoutService } from '../../services/gallery-layout.service';
 
 export interface ImagesState {
     images: ItemInfo[];
@@ -16,11 +17,11 @@ export interface ListItemsQuery {
 
 @Injectable()
 export class ImageListStore extends ComponentStore<ImagesState> {
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, private readonly galleryLayoutService: GalleryLayoutService) {
         super({ images: [] });
     }
 
-    readonly getImages = this.effect((query$: Observable<ListItemsQuery>) => {
+    readonly fetchImages = this.effect((query$: Observable<ListItemsQuery>) => {
         return query$.pipe(
             withLatestFrom(this.select((state) => state.images)),
             switchMap(([query, images]) => {
@@ -49,7 +50,17 @@ export class ImageListStore extends ComponentStore<ImagesState> {
         );
     });
 
-    readonly addItems = this.updater((state, items: ItemInfo[]) => ({
+    private readonly addItems = this.updater((state, items: ItemInfo[]) => ({
         images: [...state.images, ...items],
     }));
+
+    readonly resizeRows = (rowWidth$: Observable<number>) => {
+        return rowWidth$.pipe(
+            switchMap((size) =>
+                this.select((state) => state.images).pipe(
+                    map((images) => this.galleryLayoutService.groupIntoRows(images, size))
+                )
+            )
+        );
+    };
 }

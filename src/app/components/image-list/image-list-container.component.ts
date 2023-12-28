@@ -25,7 +25,6 @@ import {
 import { ItemInfo } from '../../dto/item-info';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
-import { GalleryLayoutService } from '../../services/gallery-layout.service';
 
 export type RowInfo = {
     row: ItemInfo[];
@@ -54,9 +53,7 @@ export class ImageListContainerComponent implements OnInit, OnDestroy, AfterView
         .select((state) => state.images)
         .pipe(filter((x) => x.length > 0));
 
-    readonly itemsAsRows$: Observable<ItemInfo[][]> = this.resizeNotificator$.pipe(
-        switchMap((size) => this.images$.pipe(map((images) => this.galleryLayoutService.groupIntoRows(images, size))))
-    );
+    readonly itemsAsRows$: Observable<ItemInfo[][]> = this.imagesStore.resizeRows(this.resizeNotificator$);
 
     readonly rowsInfo$: Observable<RowInfo[]> = combineLatest([
         this.topPosition$.pipe(debounceTime(200)),
@@ -77,7 +74,6 @@ export class ImageListContainerComponent implements OnInit, OnDestroy, AfterView
 
     constructor(
         private readonly imagesStore: ImageListStore,
-        private readonly galleryLayoutService: GalleryLayoutService,
         private readonly zone: NgZone,
         private readonly router: Router,
         private readonly route: ActivatedRoute,
@@ -95,7 +91,7 @@ export class ImageListContainerComponent implements OnInit, OnDestroy, AfterView
     }
 
     ngOnInit(): void {
-        this.imagesStore.getImages({
+        this.imagesStore.fetchImages({
             parentId: this.rootId,
             take: 1000,
             skip: 0,
