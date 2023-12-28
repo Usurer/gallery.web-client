@@ -1,13 +1,9 @@
-<ng-container *ngIf="rowsInfo$ | async as rowsInfo">
-  <div class="rows-wrapper">
-    <div *ngFor="let rowInfo of rowsInfo; trackBy: trackRow" class="row">
-      <div *ngFor="let image of rowInfo.row; trackBy: trackImage" class="img-wrapper"  [style.width.px]="image.width" [style.height.px]="image.height">
-        <a [routerLink]="['./', image.id]">
-          <img *ngIf="rowInfo.visible" @myInsertRemoveTrigger src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" alt="">
-        </a>
-      </div>
+<div class="rows-wrapper">
+  <div *ngFor="let rowInfo of rowsInfo; trackBy: trackRow" class="row">
+    <div *ngFor="let image of rowInfo.row; trackBy: trackImage" class="img-wrapper"  [style.width.px]="image.width" [style.height.px]="image.height">
+      <a [routerLink]="['./', image.id]">
+        <img *ngIf="rowInfo.visible" @myInsertRemoveTrigger src="{{'http://localhost:5279/Images/GetImagePreview?height=200&id=' + image.id}}" alt="">
+      </a>
     </div>
   </div>
-</ng-container>
-
-<router-outlet></router-outlet>
+</div>

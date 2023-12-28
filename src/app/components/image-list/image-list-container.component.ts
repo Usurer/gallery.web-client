@@ -2,15 +2,11 @@ import {
     AfterViewInit,
     ChangeDetectionStrategy,
     Component,
-    ElementRef,
     HostListener,
     Input,
     NgZone,
     OnDestroy,
     OnInit,
-    QueryList,
-    ViewChild,
-    ViewChildren,
     ViewContainerRef,
     ViewEncapsulation,
 } from '@angular/core';
@@ -23,18 +19,13 @@ import {
     debounceTime,
     distinctUntilChanged,
     filter,
-    first,
     map,
-    startWith,
     switchMap,
-    tap,
-    withLatestFrom,
 } from 'rxjs';
 import { ItemInfo } from '../../dto/item-info';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClickNotificationService } from '../../services/click-notification.service';
 import { GalleryLayoutService } from '../../services/gallery-layout.service';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 
 type RowInfo = {
     row: ItemInfo[];
@@ -49,12 +40,6 @@ type RowInfo = {
     encapsulation: ViewEncapsulation.Emulated,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [ClickNotificationService],
-    animations: [
-        trigger('myInsertRemoveTrigger', [
-            transition(':enter', [style({ opacity: 0 }), animate('300ms', style({ opacity: 1 }))]),
-            transition(':leave', [animate('100ms', style({ opacity: 0 }))]),
-        ]),
-    ],
 })
 export class ImageListContainerComponent implements OnInit, OnDestroy, AfterViewInit {
     private topPosition$ = new BehaviorSubject<number>(0);
@@ -157,13 +142,5 @@ export class ImageListContainerComponent implements OnInit, OnDestroy, AfterView
         }
 
         return result;
-    }
-
-    trackImage(idx: number, itemInfo: ItemInfo): string {
-        return `${itemInfo.id}`;
-    }
-
-    trackRow(idx: number, rowInfo: RowInfo): string {
-        return `${idx}_${rowInfo.rowHeight}_${rowInfo.visible}`;
     }
 }
