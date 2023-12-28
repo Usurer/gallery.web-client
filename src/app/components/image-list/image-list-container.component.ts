@@ -10,7 +10,7 @@ import {
     ViewContainerRef,
     ViewEncapsulation,
 } from '@angular/core';
-import { ImageListStore } from '../../services/image-list.store';
+import { ImageListStore } from './image-list.store';
 import {
     BehaviorSubject,
     Observable,
@@ -39,7 +39,7 @@ export type RowInfo = {
     styleUrls: ['./image-list-container.component.scss'],
     encapsulation: ViewEncapsulation.Emulated,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [ClickNotificationService],
+    providers: [ClickNotificationService, ImageListStore],
 })
 export class ImageListContainerComponent implements OnInit, OnDestroy, AfterViewInit {
     private topPosition$ = new BehaviorSubject<number>(0);

@@ -1,7 +1,7 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { switchMap, catchError, Observable, EMPTY, withLatestFrom } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { ItemInfo } from '../dto/item-info';
+import { ItemInfo } from '../../dto/item-info';
 import { HttpClient } from '@angular/common/http';
 
 export interface ImagesState {
@@ -14,9 +14,7 @@ export interface ListItemsQuery {
     skip: number;
 }
 
-@Injectable({
-    providedIn: 'root',
-})
+@Injectable()
 export class ImageListStore extends ComponentStore<ImagesState> {
     constructor(private httpClient: HttpClient) {
         super({ images: [] });
