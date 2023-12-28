@@ -7,9 +7,10 @@ import { ImageListRoutingModule } from './image-list.routing.module';
 import { ImagePopupModule } from '../image-popup/image-popup.module';
 import { MatIconModule } from '@angular/material/icon';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ImageListContainerComponent } from './image-list-container.component';
 
 @NgModule({
-    declarations: [ImageListComponent],
+    declarations: [ImageListComponent, ImageListContainerComponent],
     imports: [
         CommonModule,
         BrowserModule,

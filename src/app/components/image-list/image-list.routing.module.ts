@@ -8,10 +8,10 @@ import {
     RouterStateSnapshot,
 } from '@angular/router';
 import { NgModule, inject } from '@angular/core';
-import { ImageListComponent } from './image-list.component';
 import { ImagePopupComponent } from '../image-popup/image-popup.component';
 import { MetadataService } from '../../services/metadata.service';
 import { map } from 'rxjs';
+import { ImageListContainerComponent } from './image-list-container.component';
 
 const canActivate: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const router = inject(Router);
@@ -31,12 +31,12 @@ const canActivate: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state
 const ROUTES: Route[] = [
     {
         path: 'imagelist/:rootId',
-        component: ImageListComponent,
+        component: ImageListContainerComponent,
         children: [{ path: ':id', component: ImagePopupComponent }],
     },
     {
         path: 'imagelist',
-        component: ImageListComponent,
+        component: ImageListContainerComponent,
         canActivate: [canActivate],
     },
 ];
