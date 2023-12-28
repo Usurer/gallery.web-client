@@ -1,7 +1,7 @@
-import { ItemInfo } from "../../dto/item-info";
+import { ImageInfo } from '../../dto/image-info';
 
 export type RowInfo = {
-    row: ItemInfo[];
+    row: ImageInfo[];
     visible: boolean;
     rowHeight: number;
 };

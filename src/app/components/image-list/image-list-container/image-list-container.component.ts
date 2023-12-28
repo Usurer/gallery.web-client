@@ -5,8 +5,10 @@ import {
     HostListener,
     Input,
     NgZone,
+    OnChanges,
     OnDestroy,
     OnInit,
+    SimpleChanges,
     ViewContainerRef,
     ViewEncapsulation,
 } from '@angular/core';
@@ -24,7 +26,7 @@ import { RowInfo } from '../row-info';
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [ClickNotificationService, ImageListStore],
 })
-export class ImageListContainerComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ImageListContainerComponent implements OnDestroy, AfterViewInit, OnChanges {
     private topPosition$ = new BehaviorSubject<number>(0);
 
     private resizeObserver?: ResizeObserver;
@@ -66,16 +68,17 @@ export class ImageListContainerComponent implements OnInit, OnDestroy, AfterView
         this.resizeObserver?.disconnect();
     }
 
-    ngOnInit(): void {
+    ngAfterViewInit() {
+        this.attachResizeObserver();
+    }
+
+    ngOnChanges(): void {
+        this.imagesStore.clearState();
         this.imagesStore.fetchImages({
             parentId: this.rootId,
             take: 1000,
             skip: 0,
         });
-    }
-
-    ngAfterViewInit() {
-        this.attachResizeObserver();
     }
 
     private attachResizeObserver() {

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
-import { ItemInfo } from '../../../dto/item-info';
+import { ImageInfo } from '../../../dto/image-info';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { RowInfo } from '../row-info';
 
@@ -20,7 +20,7 @@ export class ImageListComponent {
     @Input()
     rowsInfo: RowInfo[] = [];
 
-    trackImage(_: number, itemInfo: ItemInfo): string {
+    trackImage(_: number, itemInfo: ImageInfo): string {
         return `${itemInfo.id}`;
     }
 

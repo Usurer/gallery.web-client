@@ -1,19 +1,14 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { switchMap, catchError, Observable, EMPTY, withLatestFrom, map, combineLatest, filter } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { ItemInfo } from '../../dto/item-info';
+import { ImageInfo } from '../../dto/image-info';
 import { HttpClient } from '@angular/common/http';
 import { GalleryLayoutService } from '../../services/gallery-layout.service';
 import { RowInfo } from './row-info';
-
-export interface ListItemsQuery {
-    parentId: number;
-    take: number;
-    skip: number;
-}
+import { ListItemsQuery } from '../../common/list-items-query';
 
 interface ImagesState {
-    images: ItemInfo[];
+    images: ImageInfo[];
 }
 
 @Injectable()
@@ -31,7 +26,7 @@ export class ImageListStore extends ComponentStore<ImagesState> {
                 const extensions = ['.jpg', '.jpeg'].map((x) => `&extensions=${x}`).join('');
                 const url = `http://localhost:5279/Images/ListItems?parentId=${query.parentId}&take=${take}&skip=${skip}${extensions}`;
 
-                return this.httpClient.get<ItemInfo[]>(url).pipe(
+                return this.httpClient.get<ImageInfo[]>(url).pipe(
                     tapResponse(
                         (imageList) => {
                             if (imageList?.length) {
@@ -51,7 +46,11 @@ export class ImageListStore extends ComponentStore<ImagesState> {
         );
     });
 
-    private addItems = this.updater((state, items: ItemInfo[]) => ({
+    readonly clearState = this.updater(() => ({
+        images: [],
+    }));
+
+    private addItems = this.updater((state, items: ImageInfo[]) => ({
         images: [...state.images, ...items],
     }));
 
@@ -80,7 +79,7 @@ export class ImageListStore extends ComponentStore<ImagesState> {
         );
     };
 
-    private setRowsVisibility(rows: ItemInfo[][], scrollTop: number, containerHeight: number): RowInfo[] {
+    private setRowsVisibility(rows: ImageInfo[][], scrollTop: number, containerHeight: number): RowInfo[] {
         const result = [];
         const rowHeight = rows[0][0].height ?? 0;
 
