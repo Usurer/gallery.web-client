@@ -10,17 +10,11 @@ import {
     ViewContainerRef,
     ViewEncapsulation,
 } from '@angular/core';
-import { ImageListStore } from './image-list.store';
-import {
-    BehaviorSubject,
-    Observable,
-    Subscription,
-    debounceTime,
-    distinctUntilChanged,
-} from 'rxjs';
+import { ImageListStore } from '../image-list.store';
+import { BehaviorSubject, Observable, Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClickNotificationService } from '../../services/click-notification.service';
-import { RowInfo } from './row-info';
+import { ClickNotificationService } from '../../../services/click-notification.service';
+import { RowInfo } from '../row-info';
 
 @Component({
     selector: 'glr-image-list-container',
@@ -34,7 +28,7 @@ export class ImageListContainerComponent implements OnInit, OnDestroy, AfterView
     private topPosition$ = new BehaviorSubject<number>(0);
 
     private resizeObserver?: ResizeObserver;
-    
+
     private componentWidthSubject$ = new BehaviorSubject<number>(500);
     readonly componentWidth$ = this.componentWidthSubject$.pipe(debounceTime(100), distinctUntilChanged());
 

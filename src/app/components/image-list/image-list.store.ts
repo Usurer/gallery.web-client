@@ -1,19 +1,19 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { switchMap, catchError, Observable, EMPTY, withLatestFrom, map, combineLatest } from 'rxjs';
+import { switchMap, catchError, Observable, EMPTY, withLatestFrom, map, combineLatest, filter } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ItemInfo } from '../../dto/item-info';
 import { HttpClient } from '@angular/common/http';
 import { GalleryLayoutService } from '../../services/gallery-layout.service';
 import { RowInfo } from './row-info';
 
-export interface ImagesState {
-    images: ItemInfo[];
-}
-
 export interface ListItemsQuery {
     parentId: number;
     take: number;
     skip: number;
+}
+
+interface ImagesState {
+    images: ItemInfo[];
 }
 
 @Injectable()
@@ -72,6 +72,7 @@ export class ImageListStore extends ComponentStore<ImagesState> {
     ): Observable<RowInfo[]> => {
         const rows$ = this.resizeRows(rowWidth$);
         return combineLatest([rows$, scrollTop$]).pipe(
+            filter(([rows]) => rows && rows.length > 0),
             map(([rows, scrollTop]) => {
                 const containerHeight = container.clientHeight ?? container.getBoundingClientRect().height;
                 return this.setRowsVisibility(rows, scrollTop, containerHeight);
@@ -81,7 +82,7 @@ export class ImageListStore extends ComponentStore<ImagesState> {
 
     private setRowsVisibility(rows: ItemInfo[][], scrollTop: number, containerHeight: number): RowInfo[] {
         const result = [];
-        const rowHeight = (rows[0][0].height ?? 0);
+        const rowHeight = rows[0][0].height ?? 0;
 
         const rowsInView = Math.ceil(containerHeight / rowHeight);
 

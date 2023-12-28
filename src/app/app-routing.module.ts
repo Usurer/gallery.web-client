@@ -2,7 +2,7 @@ import { Route, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { ImageListModule } from './components/image-list/image-list.module';
 import { ImageComponent } from './components/image/image.component';
-import { ImageListComponent } from './components/image-list/image-list.component';
+import { ImageListComponent } from './components/image-list/image-list/image-list.component';
 
 const APP_ROUTES: Route[] = [
     { path: 'imagelist', component: ImageListComponent },

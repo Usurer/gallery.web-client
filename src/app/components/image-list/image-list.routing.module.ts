@@ -11,7 +11,7 @@ import { NgModule, inject } from '@angular/core';
 import { ImagePopupComponent } from '../image-popup/image-popup.component';
 import { MetadataService } from '../../services/metadata.service';
 import { map } from 'rxjs';
-import { ImageListContainerComponent } from './image-list-container.component';
+import { ImageListContainerComponent } from './image-list-container/image-list-container.component';
 
 const canActivate: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const router = inject(Router);
