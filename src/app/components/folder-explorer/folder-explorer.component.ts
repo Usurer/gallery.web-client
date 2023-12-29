@@ -14,6 +14,8 @@ export class FolderExplorerComponent {
 
     onFolderSelected(folderId: number): void {
         console.log(`select ${folderId}`);
-        this.router.navigate(['../', folderId], { relativeTo: this.activatedRoute });
+        if (folderId !== this.rootId) {
+            this.router.navigate(['../', folderId], { relativeTo: this.activatedRoute });
+        }
     }
 }
