@@ -1,3 +1,5 @@
 <ng-container *ngIf="items$ | async as items">
-    <span *ngFor="let item of items" (click)="onSelected(item.id)" >{{item.name}}</span>
+    <div *ngFor="let item of items">
+        <span (click)="onSelected(item.id)">{{item.name}}</span>
+    </div>
 </ng-container>

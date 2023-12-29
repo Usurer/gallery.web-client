@@ -1,20 +1,41 @@
 :host {
     display: flex;
+    margin-top: 10px;
 }
 
-span {
+div {
+    font-size: 1rem;
+    
+
     &::after {
-        content: '>';
+        font-family: 'Material Icons';
+        vertical-align: text-bottom;
+        color: #6d6c6c;
+        content: '\e5cc';
+    }
+
+    &:first-child::before {
+        font-family: 'Material Icons';
+        vertical-align: text-bottom;
+        color: #6d6c6c;
+        content: "\e88a";
     }
 
     &:last-child::after {
         content: '';
     }
 
-    &:hover {
-        background-color: #eaeaea;
-    }
-
     cursor: default;
 }
 
+span {
+    padding: 3px;
+    // background-color: #f0f0f0;
+
+    &:hover {
+        // background-color: #d8d7d7;
+        text-decoration: underline;
+    }
+
+    border-radius: 5px;
+}
