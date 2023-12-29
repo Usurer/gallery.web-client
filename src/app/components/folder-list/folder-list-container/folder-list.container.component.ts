@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { FolderListStore } from '../folder-list.store';
 import { Observable } from 'rxjs';
 import { FolderInfo } from '../../../dto/folder-info';
@@ -9,7 +9,7 @@ import { FolderInfo } from '../../../dto/folder-info';
     styleUrls: ['./folder-list.container.component.scss'],
     providers: [FolderListStore],
 })
-export class FolderListContainerComponent implements OnInit {
+export class FolderListContainerComponent implements OnChanges {
     @Input()
     rootId!: number;
 
@@ -20,7 +20,7 @@ export class FolderListContainerComponent implements OnInit {
 
     constructor(private folderStore: FolderListStore) {}
 
-    ngOnInit(): void {
+    ngOnChanges(): void {
         this.folderStore.fetchFolders({
             parentId: this.rootId,
             take: 1000,

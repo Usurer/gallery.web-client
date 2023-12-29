@@ -26,9 +26,7 @@ export class FolderListStore extends ComponentStore<FolderState> {
                 return this.httpClient.get<FolderInfo[]>(url).pipe(
                     tapResponse(
                         (folders) => {
-                            if (folders?.length) {
-                                this.addItems(folders);
-                            }
+                            this.setItems(folders);
                         },
                         (error) => {
                             throw error;
@@ -43,7 +41,7 @@ export class FolderListStore extends ComponentStore<FolderState> {
         );
     });
 
-    private addItems = this.updater((state, items: FolderInfo[]) => ({
-        folders: [...state.folders, ...items],
+    private setItems = this.updater((state, items: FolderInfo[]) => ({
+        folders: items,
     }));
 }
