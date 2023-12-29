@@ -52,6 +52,17 @@ img {
 
 .img-wrapper {
     padding: 2px;
-
     background-color: #eaeaea;
+}
+
+.row:first-child {
+    .img-wrapper {
+        padding-top: 0;
+    }
+}
+
+.row:last-child {
+    .img-wrapper {
+        padding-bottom: 0;
+    }
 }
