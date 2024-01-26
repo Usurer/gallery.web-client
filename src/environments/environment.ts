@@ -1,11 +1,7 @@
-export interface IEnvironment {
-    production: boolean,
-    imagesApiUri: string,
-    foldersApiUri: string
-}
+import { EnvironmentConfig } from './environment-config';
 
-export const environment: IEnvironment = {
+export const environment: EnvironmentConfig = {
     production: true,
     foldersApiUri: '',
-    imagesApiUri: ''
+    imagesApiUri: '',
 };
