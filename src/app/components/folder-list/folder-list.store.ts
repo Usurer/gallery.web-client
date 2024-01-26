@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { FolderInfo } from '../../dto/folder-info';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { HttpClient } from '@angular/common/http';
 import { ListItemsQuery } from '../../common/list-items-query';
 import { EMPTY, Observable, catchError, switchMap, withLatestFrom } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { ENVIRONMENT_CONFIG, EnvironmentConfig } from '../../../environments/environment-config';
 
 interface FolderState {
     folders: FolderInfo[];
@@ -12,7 +12,7 @@ interface FolderState {
 
 @Injectable()
 export class FolderListStore extends ComponentStore<FolderState> {
-    constructor(private httpClient: HttpClient) {
+    constructor(@Inject(ENVIRONMENT_CONFIG) private environment: EnvironmentConfig, private httpClient: HttpClient) {
         super({ folders: [] });
     }
 
@@ -22,7 +22,7 @@ export class FolderListStore extends ComponentStore<FolderState> {
             switchMap(([query, folders]) => {
                 const take = query.take ?? 10;
                 const skip = query.skip ?? folders.length ?? 0;
-                const url = `${environment.foldersApiUri}/ListItems/${query.parentId}?take=${take}&skip=${skip}`;
+                const url = `${this.environment.foldersApiUri}/ListItems/${query.parentId}?take=${take}&skip=${skip}`;
 
                 return this.httpClient.get<FolderInfo[]>(url).pipe(
                     tapResponse(

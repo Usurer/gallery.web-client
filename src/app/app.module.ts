@@ -12,6 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { FolderExplorerModule } from './components/folder-explorer/folder-explorer.module';
+import { ENVIRONMENT_CONFIG } from '../environments/environment-config';
+import { environment } from '../environments/environment';
 
 @NgModule({
     declarations: [PlaceholderComponent, AppComponent],
@@ -26,6 +28,7 @@ import { FolderExplorerModule } from './components/folder-explorer/folder-explor
         BrowserAnimationsModule,
         MatIconModule,
     ],
+    providers: [{ provide: ENVIRONMENT_CONFIG, useValue: environment }],
     bootstrap: [AppComponent],
 })
 export class AppModule {
