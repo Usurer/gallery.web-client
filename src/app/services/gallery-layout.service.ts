@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { ItemInfo } from '../dto/item-info';
-import { raceWith } from 'rxjs';
+import { ImageInfo } from '../dto/image-info';
 
-export type Row = ItemInfo[];
+export type Row = ImageInfo[];
 
 @Injectable({
     providedIn: 'root',
 })
 export class GalleryLayoutService {
-    public groupIntoRows(images: ItemInfo[], containerWidth: number): Row[] {
+    public groupIntoRows(images: ImageInfo[], containerWidth: number): Row[] {
         performance.mark('define-rows-start');
 
         const rows: Row[] = [];
 
-        let buffer: ItemInfo[] = [];
+        let buffer: ImageInfo[] = [];
         let lineWidth = 0;
 
         const rowHeight = 200;
@@ -58,6 +57,11 @@ export class GalleryLayoutService {
             }
         }
 
+        // if the last row is not full we haven't added these items to the rows yet
+        if (buffer.length > 0) {
+            rows.push(buffer);
+        }
+
         performance.mark('define-rows-end');
         const perf = performance.measure('my-measure', 'define-rows-start', 'define-rows-end');
         console.log(perf.duration);
@@ -65,7 +69,7 @@ export class GalleryLayoutService {
         return rows;
     }
 
-    public resizeBufferToSmaller(row: ItemInfo[], containerWidth: number): ItemInfo[] {
+    public resizeBufferToSmaller(row: ImageInfo[], containerWidth: number): ImageInfo[] {
         // const widths = new Array<number>(buffer.length);
         const currentRowWidth = row.reduce((acc, item) => acc + (item.width ?? 0), 0);
         const ratio = currentRowWidth / containerWidth; // should be > 1
@@ -81,7 +85,7 @@ export class GalleryLayoutService {
     }
 
     // It's identical to the resizeBufferToSmaller
-    public resizeBufferToBigger(row: ItemInfo[], containerWidth: number): ItemInfo[] {
+    public resizeBufferToBigger(row: ImageInfo[], containerWidth: number): ImageInfo[] {
         const currentRowWidth = row.reduce((acc, item) => acc + (item.width ?? 0), 0);
         const ratio = currentRowWidth / containerWidth; // should be < 1
         const resizedImages = row.map((x) => {

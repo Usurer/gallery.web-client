@@ -8,12 +8,15 @@ import {
     RouterStateSnapshot,
 } from '@angular/router';
 import { NgModule, inject } from '@angular/core';
-import { ImageListComponent } from './image-list.component';
 import { ImagePopupComponent } from '../image-popup/image-popup.component';
 import { MetadataService } from '../../services/metadata.service';
 import { map } from 'rxjs';
+import { FOLDER_ROUTE } from '../../app-routes';
+import { FolderExplorerComponent } from './folder-explorer.component';
 
-const canActivate: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+const CURRENT_ROOT = FOLDER_ROUTE;
+
+const isRootIdSet: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const router = inject(Router);
     const activatedRoute = inject(ActivatedRoute);
     const rootId = Number.parseInt(routeSnapshot.paramMap.get('rootId') ?? '');
@@ -21,7 +24,7 @@ const canActivate: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state
     return service.getImagesMetadata(isNaN(rootId) ? undefined : rootId).pipe(
         map((x) => {
             if (isNaN(rootId) && x) {
-                router.navigate(['imagelist', x.rootId], { relativeTo: activatedRoute });
+                router.navigate([CURRENT_ROOT, x.rootId], { relativeTo: activatedRoute });
             }
             return false;
         })
@@ -30,14 +33,14 @@ const canActivate: CanActivateFn = (routeSnapshot: ActivatedRouteSnapshot, state
 
 const ROUTES: Route[] = [
     {
-        path: 'imagelist/:rootId',
-        component: ImageListComponent,
+        path: `${CURRENT_ROOT}/:rootId`,
+        component: FolderExplorerComponent,
         children: [{ path: ':id', component: ImagePopupComponent }],
     },
     {
-        path: 'imagelist',
-        component: ImageListComponent,
-        canActivate: [canActivate],
+        path: CURRENT_ROOT,
+        component: FolderExplorerComponent,
+        canActivate: [isRootIdSet],
     },
 ];
 
@@ -45,4 +48,4 @@ const ROUTES: Route[] = [
     imports: [RouterModule.forChild(ROUTES)],
     exports: [RouterModule],
 })
-export class ImageListRoutingModule {}
+export class FolderExplorerRoutingModule {}
