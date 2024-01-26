@@ -4,6 +4,7 @@ import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { HttpClient } from '@angular/common/http';
 import { ListItemsQuery } from '../../common/list-items-query';
 import { EMPTY, Observable, catchError, switchMap, withLatestFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 interface FolderState {
     folders: FolderInfo[];
@@ -21,7 +22,7 @@ export class FolderListStore extends ComponentStore<FolderState> {
             switchMap(([query, folders]) => {
                 const take = query.take ?? 10;
                 const skip = query.skip ?? folders.length ?? 0;
-                const url = `http://localhost:5279/Folders/ListItems?parentId=${query.parentId}&take=${take}&skip=${skip}`;
+                const url = `${environment.foldersApiUri}/ListItems/${query.parentId}?take=${take}&skip=${skip}`;
 
                 return this.httpClient.get<FolderInfo[]>(url).pipe(
                     tapResponse(

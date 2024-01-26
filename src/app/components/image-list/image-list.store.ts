@@ -7,6 +7,8 @@ import { GalleryLayoutService } from '../../services/gallery-layout.service';
 import { RowInfo } from './row-info';
 import { ListItemsQuery } from '../../common/list-items-query';
 
+import { environment } from '../../../environments/environment';
+
 interface ImagesState {
     images: ImageInfo[];
 }
@@ -24,7 +26,7 @@ export class ImageListStore extends ComponentStore<ImagesState> {
                 const take = query.take ?? 10;
                 const skip = query.skip ?? images.length ?? 0;
                 const extensions = ['.jpg', '.jpeg'].map((x) => `&extensions=${x}`).join('');
-                const url = `http://localhost:5279/Images/ListItems/${query.parentId}?take=${take}&skip=${skip}${extensions}`;
+                const url = `${environment.imagesApiUri}/ListItems/${query.parentId}?take=${take}&skip=${skip}${extensions}`;
 
                 return this.httpClient.get<ImageInfo[]>(url).pipe(
                     tapResponse(
