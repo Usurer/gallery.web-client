@@ -1,5 +1,5 @@
 :host {
-    background-color: rgba($color: #eaeaea, $alpha: 0.5);
+    //background-color: rgba($color: #eaeaea, $alpha: 0.5);
     display: block;
     // height: 100%;
 }
@@ -52,7 +52,18 @@ img {
 
 .img-wrapper {
     padding: 2px;
-    background-color: #eaeaea;
+    // background-color: #eaeaea;
+}
+
+@keyframes color {
+    0%   { background: #fcfcfc; }
+    50%  { background: #a0a0a0; }
+    100% { background: #fcfcfc; }
+  }
+
+img {
+    background-color: #e0e0e0;
+    animation: color 3s infinite linear;
 }
 
 .row:first-child {
