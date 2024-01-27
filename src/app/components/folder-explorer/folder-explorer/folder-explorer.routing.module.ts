@@ -8,10 +8,10 @@ import {
     RouterStateSnapshot,
 } from '@angular/router';
 import { NgModule, inject } from '@angular/core';
-import { ImagePopupComponent } from '../image-popup/image-popup.component';
-import { MetadataService } from '../../services/metadata.service';
+import { ImagePopupComponent } from '../../image-popup/image-popup.component';
+import { MetadataService } from '../../../services/metadata.service';
 import { map } from 'rxjs';
-import { FOLDER_ROUTE } from '../../app-routes';
+import { FOLDER_ROUTE } from '../../../app-routes';
 import { FolderExplorerComponent } from './folder-explorer.component';
 
 const CURRENT_ROOT = FOLDER_ROUTE;

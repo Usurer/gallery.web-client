@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { FolderInfo } from '../../dto/folder-info';
+import { FolderInfo } from '../../../dto/folder-info';
 import { Observable, switchMap } from 'rxjs';
 
 interface Store {

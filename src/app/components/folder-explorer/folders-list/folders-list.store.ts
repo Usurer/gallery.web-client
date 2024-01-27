@@ -1,17 +1,17 @@
 import { Inject, Injectable } from '@angular/core';
-import { FolderInfo } from '../../dto/folder-info';
+import { FolderInfo } from '../../../dto/folder-info';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { HttpClient } from '@angular/common/http';
-import { ListItemsQuery } from '../../common/list-items-query';
+import { ListItemsQuery } from '../../../common/list-items-query';
 import { EMPTY, Observable, catchError, switchMap, withLatestFrom } from 'rxjs';
-import { ENVIRONMENT_CONFIG, EnvironmentConfig } from '../../../environments/environment-config';
+import { ENVIRONMENT_CONFIG, EnvironmentConfig } from '../../../../environments/environment-config';
 
-interface FolderState {
+interface FoldersListState {
     folders: FolderInfo[];
 }
 
 @Injectable()
-export class FolderListStore extends ComponentStore<FolderState> {
+export class FoldersListStore extends ComponentStore<FoldersListState> {
     constructor(@Inject(ENVIRONMENT_CONFIG) private environment: EnvironmentConfig, private httpClient: HttpClient) {
         super({ folders: [] });
     }

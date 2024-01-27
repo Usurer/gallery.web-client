@@ -11,7 +11,7 @@ import { ImageModule } from './components/image/image.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
-import { FolderExplorerModule } from './components/folder-explorer/folder-explorer.module';
+import { FolderExplorerModule } from './components/folder-explorer/folder-explorer/folder-explorer.module';
 import { ENVIRONMENT_CONFIG } from '../environments/environment-config';
 import { environment } from '../environments/environment';
 
