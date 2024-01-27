@@ -76,10 +76,9 @@ export class ImageListStore extends ComponentStore<ImagesState> {
     ): Observable<RowInfo[]> => {
         const rows$ = this.resizeRows(rowWidth$);
         return combineLatest([rows$, scrollTop$]).pipe(
-            filter(([rows]) => rows && rows.length > 0),
             map(([rows, scrollTop]) => {
                 const containerHeight = container.clientHeight ?? container.getBoundingClientRect().height;
-                return this.setRowsVisibility(rows, scrollTop, containerHeight);
+                return rows && rows.length > 0 ? this.setRowsVisibility(rows, scrollTop, containerHeight) : [];
             })
         );
     };

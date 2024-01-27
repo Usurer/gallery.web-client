@@ -8,6 +8,7 @@ export type Row = ImageInfo[];
     providedIn: 'root',
 })
 export class GalleryLayoutService {
+    // TODO: TESTS!!!!!!
     public groupIntoRows(images: ImageInfo[], containerWidth: number): Row[] {
         performance.mark('define-rows-start');
 
