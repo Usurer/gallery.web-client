@@ -23,14 +23,13 @@ div {
 
     &:last-child::after {
         content: '';
-    }
-
-    cursor: default;
+    }   
 }
 
 span {
     padding: 3px;
     // background-color: #f0f0f0;
+    cursor: pointer;
 
     &:hover {
         // background-color: #d8d7d7;

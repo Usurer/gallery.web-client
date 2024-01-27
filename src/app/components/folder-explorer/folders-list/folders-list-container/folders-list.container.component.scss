@@ -4,7 +4,7 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: 15px;
-    margin: 20px;
+    margin: 20px;    
 }
 
 div {
@@ -21,6 +21,7 @@ div {
     &:hover {
         background-color: rgb(170, 170, 170);
         color: #3a3a3a;
+        cursor: pointer;
     }
 }
 

@@ -1,5 +1,5 @@
-<ng-container *ngIf="(folders$ | async) as folders">
-    <div *ngFor="let folder of folders" (click)="onClick(folder.id)">
+<ng-container *ngIf="(folders$ | async) as folders" >
+    <div *ngFor="let folder of folders" (click)="onClick(folder.id)" @myInsertRemoveTrigger>
         <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="folder" inline="false"></mat-icon>
         {{folder.name}}
     </div>
