@@ -4,7 +4,7 @@ import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { HttpClient } from '@angular/common/http';
 import { ListItemsQuery } from '../../../common/list-items-query';
 import { EMPTY, Observable, catchError, switchMap, withLatestFrom } from 'rxjs';
-import { ENVIRONMENT_CONFIG, EnvironmentConfig } from '../../../../environments/environment-config';
+import { SettingsService } from 'src/app/services/settings.service';
 
 interface FoldersListState {
     folders: FolderInfo[];
@@ -12,7 +12,7 @@ interface FoldersListState {
 
 @Injectable()
 export class FoldersListStore extends ComponentStore<FoldersListState> {
-    constructor(@Inject(ENVIRONMENT_CONFIG) private environment: EnvironmentConfig, private httpClient: HttpClient) {
+    constructor(private settings: SettingsService, private httpClient: HttpClient) {
         super({ folders: [] });
     }
 
@@ -22,7 +22,7 @@ export class FoldersListStore extends ComponentStore<FoldersListState> {
             switchMap(([query, folders]) => {
                 const take = query.take ?? 10;
                 const skip = query.skip ?? folders.length ?? 0;
-                const url = `${this.environment.foldersApiUri}/ListItems/${query.parentId}?take=${take}&skip=${skip}`;
+                const url = `${this.settings.environment.foldersApiUri}/ListItems/${query.parentId}?take=${take}&skip=${skip}`;
 
                 return this.httpClient.get<FolderInfo[]>(url).pipe(
                     tapResponse(

@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { GalleryLayoutService } from '../../services/gallery-layout.service';
 import { RowInfo } from './row-info';
 import { ListItemsQuery } from '../../common/list-items-query';
-import { ENVIRONMENT_CONFIG, EnvironmentConfig } from '../../../environments/environment-config';
+import { SettingsService } from 'src/app/services/settings.service';
 
 interface ImagesState {
     images: ImageInfo[];
@@ -15,7 +15,7 @@ interface ImagesState {
 @Injectable()
 export class ImageListStore extends ComponentStore<ImagesState> {
     constructor(
-        @Inject(ENVIRONMENT_CONFIG) private environment: EnvironmentConfig,
+        private settings: SettingsService,
         private httpClient: HttpClient,
         private readonly galleryLayoutService: GalleryLayoutService
     ) {
@@ -29,7 +29,7 @@ export class ImageListStore extends ComponentStore<ImagesState> {
                 const take = query.take ?? 10;
                 const skip = query.skip ?? images.length ?? 0;
                 const extensions = ['.jpg', '.jpeg'].map((x) => `&extensions=${x}`).join('');
-                const url = `${this.environment.imagesApiUri}/ListItems/${query.parentId}?take=${take}&skip=${skip}${extensions}`;
+                const url = `${this.settings.environment.imagesApiUri}/ListItems/${query.parentId}?take=${take}&skip=${skip}${extensions}`;
 
                 return this.httpClient.get<ImageInfo[]>(url).pipe(
                     tapResponse(
