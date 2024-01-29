@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ImageListModule } from './components/image-list/image-list.module';
-import { ImageComponent } from './components/image/image.component';
 import { PlaceholderComponent } from './components/placeholder/placeholder.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,9 +10,10 @@ import { ImageModule } from './components/image/image.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
-import { FolderExplorerModule } from './components/folder-explorer/folder-explorer/folder-explorer.module';
+import { FolderExplorerModule } from './components/folder-explorer/folder-explorer.module';
 import { ENVIRONMENT_CONFIG } from '../environments/environment-config';
 import { environment } from '../environments/environment';
+import { ScanManagerModule } from './components/scan-manager/scan-manager.module';
 
 @NgModule({
     declarations: [PlaceholderComponent, AppComponent],
@@ -24,6 +24,7 @@ import { environment } from '../environments/environment';
         ImageModule,
         ImageListModule,
         FolderExplorerModule,
+        ScanManagerModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         MatIconModule,
