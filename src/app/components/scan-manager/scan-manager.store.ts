@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { EMPTY, Observable, catchError, switchMap, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, map, switchMap, tap } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 
 interface ScanManagerState {
@@ -27,20 +27,28 @@ export class ScanManagerStore extends ComponentStore<ScanManagerState> {
                 })
             ),
             switchMap((path) => {
-                return this.httpClient.post(this.settings.environment.foldersApiUri, { path }).pipe(
-                    catchError((error) => {
-                        console.log(`Oops! An API access error! ${JSON.stringify(error)}`);
-
-                        this.setState((currentState: ScanManagerState) => {
-                            return {
-                                ...currentState,
-                                scans: currentState.scans.filter((x) => x !== path),
-                            };
-                        });
-
-                        return EMPTY;
+                const headers = {
+                    'Content-Type': 'application/json',
+                };
+                return this.httpClient
+                    .post(this.settings.environment.scansApiUri, JSON.stringify(path), {
+                        headers,
                     })
-                );
+                    .pipe(
+                        map(response => response),
+                        catchError((error) => {
+                            console.log(`Oops! An API access error! ${JSON.stringify(error)}`);
+
+                            this.setState((currentState: ScanManagerState) => {
+                                return {
+                                    ...currentState,
+                                    scans: currentState.scans.filter((x) => x !== path),
+                                };
+                            });
+
+                            return EMPTY;
+                        })
+                    );
             })
         );
     });
