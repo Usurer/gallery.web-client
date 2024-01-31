@@ -27,6 +27,11 @@ export class ImageListComponent {
     public imagePreviewUrl = '';
 
     constructor(settings: SettingsService) {
+        //TODO: We have to invalidate browser cache for changed images
+        // As the most simple way to do that - add Updated timestamp for every image in the DB
+        // This field should be set to the current datetime on record creation or update
+        // This field should be passed from API to the cliend and image api requests should include it as &ts=timestamp
+        // Also this field should be included into a disk cache key
         this.imagePreviewUrl = `${settings.environment.imagesApiUri}/GetImagePreview?height=200&id=`;
     }
 
