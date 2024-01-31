@@ -39,12 +39,13 @@ const ROUTES: Route[] = [
     {
         path: `${CURRENT_ROOT}/:rootId`,
         component: FolderExplorerComponent,
-        children: [{ path: ':id', component: ImagePopupComponent }],
+        children: [{ path: 'image/:id', component: ImagePopupComponent }],
     },
     {
         path: CURRENT_ROOT,
         component: FolderExplorerComponent,
-        canActivate: [isRootIdSet],
+        children: [{ path: 'image/:id', component: ImagePopupComponent }],
+        //canActivate: [isRootIdSet],
     },
 ];
 

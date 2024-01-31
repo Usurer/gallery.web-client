@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 import { ImageInfo } from '../../../dto/image-info';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { RowInfo } from '../row-info';
+import { IMAGE_ROUTE } from 'src/app/app-routes';
+import { SettingsService } from 'src/app/services/settings.service';
 
 @Component({
     selector: 'glr-image-list',
@@ -19,6 +21,14 @@ import { RowInfo } from '../row-info';
 export class ImageListComponent {
     @Input()
     rowsInfo: RowInfo[] = [];
+
+    public imageRootPrefix = IMAGE_ROUTE;
+
+    public imagePreviewUrl = '';
+
+    constructor(settings: SettingsService) {
+        this.imagePreviewUrl = `${settings.environment.imagesApiUri}/GetImagePreview?height=200&id=`;
+    }
 
     trackImage(_: number, itemInfo: ImageInfo): string {
         return `${itemInfo.id}`;
