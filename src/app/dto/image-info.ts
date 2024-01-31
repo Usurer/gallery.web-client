@@ -3,4 +3,5 @@ export interface ImageInfo {
     name: string;
     width: number;
     height: number;
+    updatedAtDate: number;
 }
