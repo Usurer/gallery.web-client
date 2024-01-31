@@ -14,6 +14,9 @@ export class ScanManagerComponent {
     constructor(private store: ScanManagerStore) {}
 
     public addScan(value: string): void {
-        this.store.addScan(value);
+        const data = value.split(';').filter(x => x.length);
+        for(const d of data) {
+            this.store.addScan(d)
+        }
     }
 }

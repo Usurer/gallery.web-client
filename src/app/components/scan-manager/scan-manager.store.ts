@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { EMPTY, Observable, catchError, map, switchMap, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, map, mergeMap, switchMap, tap } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 
 interface ScanManagerState {
@@ -26,7 +26,7 @@ export class ScanManagerStore extends ComponentStore<ScanManagerState> {
                     };
                 })
             ),
-            switchMap((path) => {
+            mergeMap((path) => {
                 const headers = {
                     'Content-Type': 'application/json',
                 };

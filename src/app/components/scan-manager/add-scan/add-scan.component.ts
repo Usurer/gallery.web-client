@@ -18,7 +18,6 @@ export class AddScanComponent {
 
     public onSubmit(value: string): void {
         if (value.length > 0) {
-            console.log('Emit ' + value);
             this.addScan.emit(value);
         }
     }
