@@ -31,11 +31,11 @@ export class ScanManagerStore extends ComponentStore<ScanManagerState> {
                     'Content-Type': 'application/json',
                 };
                 return this.httpClient
-                    .post(this.settings.environment.scansApiUri, JSON.stringify(path), {
+                    .put(`${this.settings.environment.scansApiUri}/AddScan`, JSON.stringify(path), {
                         headers,
                     })
                     .pipe(
-                        map(response => response),
+                        map((response) => response),
                         catchError((error) => {
                             console.log(`Oops! An API access error! ${JSON.stringify(error)}`);
 
